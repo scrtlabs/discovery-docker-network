@@ -1,0 +1,90 @@
+version: '3'
+
+services:
+
+  contract:
+    build:
+      context: enigma-contract
+      args:
+        - GIT_BRANCH_CONTRACT=${GIT_BRANCH_CONTRACT}
+    stdin_open: true
+    tty: true
+    ports:
+        - "9545:9545"
+    networks:
+        - net
+    hostname: enigma_contract
+    entrypoint:
+        - /bin/bash
+        - -c
+        - ./start_ganache.bash; bash 
+
+  p2p-proxy:
+    build: 
+      context: enigma-p2p
+      args:
+        - GIT_BRANCH_P2P=${GIT_BRANCH_P2P}
+    stdin_open: true
+    tty: true
+    ports:
+        - "3346:3346"
+        - "10300:10300"
+    networks:
+        - net
+    hostname: enigma_p2p_proxy
+    entrypoint:
+        - /bin/bash
+        - -c
+        - cd enigma-p2p/src/cli && node cli_app.js -i B1 -b B1 -p B1 --proxy 3346; bash
+
+  p2p-worker:
+    build: 
+      context: enigma-p2p
+      args:
+        - GIT_BRANCH_P2P=${GIT_BRANCH_P2P}
+    stdin_open: true
+    tty: true
+    ports:
+        - "8081:8081"
+    networks:
+        - net
+    hostname: enigma_p2p_worker
+    entrypoint:
+        - /bin/bash
+        - -c
+        - ./start_worker.bash; bash
+
+  client:
+    build:
+      context: enigma-contract
+      args:
+        - GIT_BRANCH_CONTRACT=${GIT_BRANCH_CONTRACT}
+    stdin_open: true
+    tty: true
+    networks:
+        - net
+    hostname: client
+    entrypoint:
+        - /bin/bash
+        - -c
+        - ./start_test.bash; bash
+
+  core:
+    build:
+      context: enigma-core
+      args:
+        - SGX_MODE=${SGX_MODE}
+        - GIT_BRANCH_CORE=${GIT_BRANCH_CORE}
+    stdin_open: true
+    tty: true
+    ports:
+      - "5552-5562:5552"
+    hostname: enigma_core
+    networks:
+      - net
+
+networks:
+    net:
+
+volumes:
+  built_contracts:
