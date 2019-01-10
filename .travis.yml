@@ -1,3 +1,5 @@
+language: generic
+
 services: 
   - docker
 
@@ -10,7 +12,8 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   - cp .env-template .env
-  - docker-compose build --build-arg SSH_PRIVATE_KEY=$SSH_PRIVATE_KEY
+  - docker-compose build --build-arg SSH_PRIVATE_KEY="$(cat ~/.ssh/id_rsa)"
+  - docker-compose up --no-start
   - docker-compose start
 
 script:
