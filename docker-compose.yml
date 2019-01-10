@@ -64,10 +64,6 @@ services:
     networks:
         - net
     hostname: client
-    entrypoint:
-        - /bin/bash
-        - -c
-        - ./start_test.bash; bash
 
   core:
     build:
