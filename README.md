@@ -22,7 +22,7 @@ The following is a list of the Integration Tests planned, and their status:
 
 ## Running the tests
 
-1. Create your `env` file from the template:
+1. Create your `env` file from the template. No need to change any environment variables. Lines 6-9 can be disregarded as they are not currently used.
 
     ```
     $ cp .env-template .env
