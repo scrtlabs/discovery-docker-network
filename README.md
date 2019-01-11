@@ -19,3 +19,29 @@ The following is a list of the Integration Tests planned, and their status:
 |        | Register a new worker node in the Enigma contract |
 |        | Deploy a new contract |
 |        | Compute Task |
+
+## Running the tests
+
+1. Create your `env` file from the template:
+
+    ```
+    $ cp .env-template .env
+    ```
+
+2. Build the docker images. Because the build fetches private repositories, you need to provide your private Github SSH key (for example `~/.ssh/id_rsa`). The first time, this command can take between one or two hours. It will build and run in SGX simulation mode (Hardware mode not supported for this repo, although is fully supported in the core repo).
+
+    ```
+    $ docker-compose build --build-arg SSH_PRIVATE_KEY="$(cat ~/.ssh/id_rsa)"
+    ```
+
+3. Launch the docker network
+
+    ```
+    $ docker-compose up
+    ```
+
+4. In a separate terminal, run the integration tests:
+
+    ```
+    $ docker-compose run client ./start_test.bash
+    ```
