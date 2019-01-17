@@ -34,6 +34,7 @@ RUN cd enigma-js && yarn install
 WORKDIR /root
 COPY start_test.bash .
 COPY start_ganache.bash .
+COPY run_migrations.bash .
 
 ENTRYPOINT ["/usr/bin/env"]
 CMD ["/bin/bash"]

@@ -17,4 +17,5 @@ before_install:
   - docker-compose start
 
 script:
+  - sleep 5 && docker exec enigma_contract_1 ./run_migrations.bash
   - docker-compose run client ./start_test.bash
