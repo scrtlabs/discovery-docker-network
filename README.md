@@ -40,7 +40,13 @@ The following is a list of the Integration Tests planned, and their status:
     $ docker-compose up
     ```
 
-4. In a separate terminal, run the integration tests:
+4. In a separate terminal, migrate the contracts first...
+
+    ```
+    $ docker exec enigma_contract_1 ./run_migrations.bash
+    ```
+
+5. ... and then, run the integration tests:
 
     ```
     $ docker-compose run client ./start_test.bash
