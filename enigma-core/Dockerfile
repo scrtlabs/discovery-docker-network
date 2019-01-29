@@ -1,13 +1,13 @@
-########################################################################	
-# BUILD STAGE 1 
+########################################################################
+# BUILD STAGE 1
 # inherit the baidu sdk image
 FROM baiduxlab/sgx-rust:1804 as builder
 
-# Required for private repos, will be removed when repo is public	
-ARG SSH_PRIVATE_KEY	
-RUN mkdir /root/.ssh/	
-RUN echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa	
-RUN chmod 600 /root/.ssh/id_rsa	
+# Required for private repos, will be removed when repo is public
+ARG SSH_PRIVATE_KEY
+RUN mkdir /root/.ssh/
+RUN echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa
+RUN chmod 600 /root/.ssh/id_rsa
 RUN ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts
 
 WORKDIR /root
@@ -18,7 +18,7 @@ RUN mv enigma-core-internal enigma-core
 
 RUN rm -f /root/.ssh/id_rsa
 
-########################################################################	
+########################################################################
 # BUILD STAGE 2 - copy the repo dir into a fresh runtime image
 FROM baiduxlab/sgx-rust:1804 as runtime
 COPY --from=builder /root/enigma-core /root/enigma-core
@@ -44,7 +44,7 @@ RUN . /opt/sgxsdk/environment && . /root/.cargo/env && SGX_MODE=$SGX_MODE make J
     rm -rf /root/.cargo/git/checkouts/rust-sgx-sdk-fc8771c5c45bde9a/212d9f4/xargo/ && SGX_MODE=$SGX_MODE make JOBS=4 || true
 
 WORKDIR /root/enigma-core/enigma-core/app
-RUN . /opt/sgxsdk/environment && . /root/.cargo/env && cargo test test_real_listener
+RUN . /opt/sgxsdk/environment && . /root/.cargo/env && cargo build
 
 WORKDIR /root
 COPY start_core.bash .
