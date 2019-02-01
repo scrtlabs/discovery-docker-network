@@ -1,0 +1,35 @@
+pipeline:
+  build:
+    image: docker/compose:1.23.2
+    commands:
+      - cp .env-template .env
+      - mkdir /root/.ssh
+      - echo -n "$SSH_KEY" > /root/.ssh/id_rsa
+      - chmod 600 /root/.ssh/id_rsa
+      - docker-compose build --build-arg SSH_PRIVATE_KEY="$(cat /root/.ssh/id_rsa)"
+      - rm /root/.ssh/id_rsa
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    secrets: [ ssh_key ]
+
+  deploy:
+    image: docker/compose:1.23.2
+    commands:
+      - docker-compose up
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    detach: true
+
+  test:
+    image: docker/compose:1.23.2
+    commands:
+      - docker-compose run client ./start_test.bash
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  cleanup:
+    image: docker/compose:1.23.2
+    commands:
+      - docker-compose down
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
