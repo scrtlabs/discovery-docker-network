@@ -1,15 +1,11 @@
 #!/bin/bash
 cd /root/enigma-contract/enigma-js
 
-while true; do
-	curl -s -m 1 http://enigma_p2p-worker_1:8081 > /dev/null
-	if [[  $? -eq 0 ]] ; then
-		break
-	fi
-	echo "$HOSTNAME: Waiting for enigma_p2p-worker_1..."
-	sleep 10
-done
-echo "enigma_p2p-worker_1 is ready!"
+echo "Waiting for enigma_p2p-worker_1..."
+until curl -s -m 1 p2p-worker:3346; do sleep 5; done
+
+echo "Waiting for p2p-worker to register..."
+sleep 7
 
 proxy=$(getent hosts enigma_p2p-proxy_1 | awk '{ print $1 }')
 sed -i "s_http://localhost:3346_http://$proxy:3346_" test/integrationTests/Enigma-integration.spec.js
