@@ -18,6 +18,8 @@ services:
         - /bin/bash
         - -c
         - ./start_ganache.bash; bash 
+    volumes:
+        - "built_contracts:/root/enigma-contract/build/contracts"
 
   p2p-proxy:
     build: 
@@ -53,6 +55,8 @@ services:
         - /bin/bash
         - -c
         - ./start_worker.bash; bash
+    volumes:
+        - "built_contracts:/root/enigma-p2p/test/ethereum/scripts/build/contracts"
 
   client:
     build:
@@ -64,6 +68,8 @@ services:
     networks:
         - net
     hostname: client
+    volumes:
+        - "built_contracts:/root/enigma-contract/build/contracts"
 
   core:
     build:
@@ -75,6 +81,8 @@ services:
     tty: true
     ports:
       - "5552-5562:5552"
+    devices:
+      - "/dev/isgx:/dev/isgx"
     hostname: enigma_core
     networks:
       - net

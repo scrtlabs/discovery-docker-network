@@ -1,6 +1,9 @@
 # discovery-integration-tests
 
-[![Build Status](https://travis-ci.com/enigmampc/discovery-integration-tests.svg?token=cNBBjbVVEGszuAJUokFT&branch=develop)](https://travis-ci.com/enigmampc/discovery-integration-tests)
+| Service | Master | Develop |
+|---------|--------|---------|
+| Drone (SGX_MODE=HW) | <img src="https://drone.enigma.co/api/badges/enigmampc/discovery-integration-tests/status.svg?branch=master"/> | <img src="https://drone.enigma.co/api/badges/enigmampc/discovery-integration-tests/status.svg?branch=develop"/> | 
+| Travis (SGX_MODE=SW) | [![Build Status](https://travis-ci.com/enigmampc/discovery-integration-tests.svg?token=cNBBjbVVEGszuAJUokFT&branch=master)](https://travis-ci.com/enigmampc/discovery-integration-tests) (Disabled) | [![Build Status](https://travis-ci.com/enigmampc/discovery-integration-tests.svg?token=cNBBjbVVEGszuAJUokFT&branch=develop)](https://travis-ci.com/enigmampc/discovery-integration-tests) (Disabled)
 
 This repository includes a suite of Integration Tests across multiple repositories for the Discovery release of the Enigma Network.
 Currently integrates with the following repositories, and their corresponding branches (eventually becoming master):
@@ -15,8 +18,8 @@ The following is a list of the Integration Tests planned, and their status:
 
 | Status | Test |
 |--------|------|
+| Pass   | Register a new worker node in the Enigma contract |
 | Pass   | Client requests encryption key from worker |
-|        | Register a new worker node in the Enigma contract |
 |        | Deploy a new contract |
 |        | Compute Task |
 
@@ -40,7 +43,7 @@ The following is a list of the Integration Tests planned, and their status:
     $ docker-compose up
     ```
 
-4. In a separate terminal, run the integration tests:
+4. ... and then, run the integration tests:
 
     ```
     $ docker-compose run client ./start_test.bash

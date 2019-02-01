@@ -2,8 +2,6 @@
 # BUILD STAGE 1 
 FROM node:10 as builder
 
-RUN apt-get update && apt-get install -y sudo net-tools netcat
-
 # Required for private repos, will be removed when repo is public	
 ARG SSH_PRIVATE_KEY	
 RUN mkdir /root/.ssh/	
@@ -25,6 +23,8 @@ COPY --from=builder /root/enigma-contract-internal /root/enigma-contract
 
 LABEL maintainer='info@enigma.co'
 
+RUN apt-get update && apt-get install -y sudo net-tools netcat
+
 WORKDIR /root/enigma-contract
 
 RUN yarn install
@@ -34,6 +34,8 @@ RUN cd enigma-js && yarn install
 WORKDIR /root
 COPY start_test.bash .
 COPY start_ganache.bash .
+COPY simpleHTTP1.bash .
+COPY simpleHTTP2.bash .
 
 ENTRYPOINT ["/usr/bin/env"]
 CMD ["/bin/bash"]

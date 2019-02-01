@@ -30,7 +30,6 @@ RUN npm install
 
 WORKDIR /root
 COPY start_worker.bash .
-COPY simpleHTTP.bash .
 
 ENTRYPOINT ["/usr/bin/env"]
 CMD ["/bin/bash"]
