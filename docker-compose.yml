@@ -87,6 +87,23 @@ services:
     networks:
       - net
 
+  principal:
+    build:
+      context: enigma-core
+      dockerfile: Dockerfile.principal
+      args:
+        - SGX_MODE=${SGX_MODE}
+        - GIT_BRANCH_PRINCIPAL=${GIT_BRANCH_PRINCIPAL}
+    stdin_open: true
+    tty: true
+    ports:
+      - "5552-5562:5552"
+    devices:
+      - "/dev/isgx:/dev/isgx"
+    hostname: enigma_principal
+    networks:
+      - net
+
 networks:
     net:
 

@@ -8,10 +8,10 @@ echo "Waiting for p2p-worker to register..."
 sleep 7
 
 proxy=$(getent hosts enigma_p2p-proxy_1 | awk '{ print $1 }')
-sed -i "s_http://localhost:3346_http://$proxy:3346_" test/integrationTests/Enigma-integration.spec.js
+sed -i "s_http://[localhost|.0-9]*:3346_http://$proxy:3346_" test/integrationTests/Enigma-integration.spec.js
 
 contract=$(getent hosts enigma_contract_1 | awk '{ print $1 }')
-sed -i "s_http://localhost:9545_http://$contract:9545_" test/integrationTests/Enigma-integration.spec.js
+sed -i "s_http://[localhost|.0-9]*:9545_http://$contract:9545_" test/integrationTests/Enigma-integration.spec.js
 
 contractaddress=$(curl -s http://enigma_contract_1:8081)
 tokenaddress=$(curl -s http://enigma_contract_1:8082)

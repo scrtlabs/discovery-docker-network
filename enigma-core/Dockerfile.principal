@@ -12,8 +12,8 @@ RUN ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts
 
 WORKDIR /root
 
-ARG GIT_BRANCH_CORE
-RUN git clone -b $GIT_BRANCH_CORE --single-branch git@github.com:enigmampc/enigma-core-internal.git
+ARG GIT_BRANCH_PRINCIPAL
+RUN git clone -b $GIT_BRANCH_PRINCIPAL --single-branch git@github.com:enigmampc/enigma-core-internal.git
 RUN mv enigma-core-internal enigma-core
 
 RUN rm -f /root/.ssh/id_rsa
@@ -37,16 +37,19 @@ RUN echo '/opt/intel/libsgx-enclave-common/aesm/aesm_service &' >> /root/.bashrc
 
 WORKDIR /root/enigma-core/enigma-core
 RUN . /opt/sgxsdk/environment && . /root/.cargo/env && make full-clean
-ARG SGX_MODE
 
+ARG SGX_MODE
 RUN . /opt/sgxsdk/environment && . /root/.cargo/env && SGX_MODE=$SGX_MODE make JOBS=4
 
-WORKDIR /root/enigma-core/enigma-core/app
-RUN . /opt/sgxsdk/environment && . /root/.cargo/env && cargo build
+WORKDIR /root/enigma-core/enigma-principal
+RUN . /opt/sgxsdk/environment && . /root/.cargo/env && SGX_MODE=$SGX_MODE make JOBS=4
+
+# WORKDIR /root/enigma-core/enigma-core/app
+# RUN . /opt/sgxsdk/environment && . /root/.cargo/env && cargo build
 
 WORKDIR /root
-COPY start_core.bash .
-RUN mkdir /root/.enigma
+COPY start_principal.bash .
+COPY principal_test_config.json .
 
 ENTRYPOINT ["/usr/bin/env"]
-CMD ["/bin/bash","-c","./start_core.bash; bash"]
+CMD ["/bin/bash","-c","./start_principal.bash; bash"]
