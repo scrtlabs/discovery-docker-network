@@ -81,8 +81,6 @@ services:
     tty: true
     ports:
       - "5552-5562:5552"
-    devices:
-      - "/dev/isgx:/dev/isgx"
     hostname: enigma_core
     networks:
       - net
@@ -98,8 +96,6 @@ services:
     tty: true
     ports:
       - "5552-5562:5552"
-    devices:
-      - "/dev/isgx:/dev/isgx"
     hostname: enigma_principal
     networks:
       - net
