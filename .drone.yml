@@ -15,6 +15,7 @@ pipeline:
   deploy:
     image: docker/compose:1.23.2
     commands:
+      - docker-compose down
       - docker-compose up
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
