@@ -25,7 +25,7 @@ The following is a list of the Integration Tests planned, and their status:
 
 ## Running the tests
 
-1. Create your `env` file from the template. No need to change any environment variables. Lines 6-9 can be disregarded as they are not currently used.
+1. Create your `env` file from the template. No need to change any environment variables. Lines 7-10 can be disregarded as they are not currently used.
 
     ```
     $ cp .env-template .env
@@ -37,10 +37,10 @@ The following is a list of the Integration Tests planned, and their status:
     $ docker-compose build --build-arg SSH_PRIVATE_KEY="$(cat ~/.ssh/id_rsa)"
     ```
 
-3. Launch the docker network
+3. Launch the docker network (by default runs in SGX Hardware mode, see next section for running in Simulation mode).
 
     ```
-    $ docker-compose up
+    $ ./launch.bash
     ```
 
 4. ... and then, run the integration tests:
@@ -48,3 +48,10 @@ The following is a list of the Integration Tests planned, and their status:
     ```
     $ docker-compose run client ./start_test.bash
     ```
+    
+## Simulation mode
+
+The docker network can run both in SGX Hardware and Software (Simulation) modes. It defaults to SGX Hardware mode. In order to run in simulation mode, you need to do two things:
+
+1. Edit `.env` and change `SGX_MODE=SW`, and then build the docker images (Step #2 above).
+2. Launch the network with `./launch.bash -s`
