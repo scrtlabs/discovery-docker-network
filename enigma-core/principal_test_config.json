@@ -1,5 +1,5 @@
 {
-    "enigma_contract_path": "../app/tests/principal_node/contracts/Enigma.json",
+    "enigma_contract_path": "../app/tests/principal_node/contracts/IEnigma.json",
     "enigma_contract_remote_path": "",
     "enigma_contract_address": "e982E462b094850F12AF94d21D470e21bE9D0E9C",
     "account_address": "1df62f291b2e969fb0849d99d9ce41e2f137006e",

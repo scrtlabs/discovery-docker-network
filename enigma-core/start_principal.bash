@@ -1,11 +1,17 @@
 #!/bin/bash
+rm -f /root/shared/principal-sign-addr.txt
+
+/opt/intel/libsgx-enclave-common/aesm/aesm_service &
+sleep 5 # give time to aesm_service to start
+
+pushd /root/enigma-core/enigma-principal/bin
+RUST_BACKTRACE=1 ./enigma-principal-app -s /root/shared/principal-sign-addr.txt
+popd
+
 contract=$(getent hosts enigma_contract_1 | awk '{ print $1 }')
 
 echo "Waiting for contracts to be deployed..."
 until curl -s -m 1 contract:8081 >/dev/null 2>&1; do sleep 1; done
-
-/opt/intel/libsgx-enclave-common/aesm/aesm_service &
-sleep 5 # give time to aesm_service to start
 
 sed -i "s_http://[localhost|.0-9]*:9545_http://$contract:9545_" principal_test_config.json
 
