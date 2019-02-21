@@ -1,7 +1,7 @@
 ########################################################################
 # BUILD STAGE 1
-# inherit the baidu sdk image
-FROM baiduxlab/sgx-rust:1804 as builder
+# inherit the enigma-core image image
+FROM enigmampc/enigma-core:0.0.5 as builder
 
 # Required for private repos, will be removed when repo is public
 ARG SSH_PRIVATE_KEY
@@ -20,19 +20,8 @@ RUN rm -f /root/.ssh/id_rsa
 
 ########################################################################
 # BUILD STAGE 2 - copy the repo dir into a fresh runtime image
-FROM baiduxlab/sgx-rust:1804 as runtime
+FROM enigmampc/enigma-core:0.0.5 as runtime
 COPY --from=builder /root/enigma-core /root/enigma-core
-
-# dependency for https://github.com/erickt/rust-zmq
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends libzmq3-dev clang \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN rm -rf /root/sgx
-RUN git clone https://github.com/baidu/rust-sgx-sdk.git sgx -b v1.0.4
-
-RUN /root/.cargo/bin/rustup target add wasm32-unknown-unknown && rm -rf /root/.cargo/registry && rm -rf /root/.cargo/git
-RUN echo '/opt/intel/libsgx-enclave-common/aesm/aesm_service &' >> /root/.bashrc
 
 WORKDIR /root/enigma-core/enigma-core
 RUN . /opt/sgxsdk/environment && . /root/.cargo/env && make full-clean
