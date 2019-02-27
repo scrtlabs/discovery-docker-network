@@ -13,7 +13,7 @@ services:
         - "9545:9545"
     networks:
         - net
-    hostname: enigma_contract
+    hostname: contract
     entrypoint:
         - /bin/bash
         - -c
@@ -34,11 +34,11 @@ services:
         - "10300:10300"
     networks:
         - net
-    hostname: enigma_p2p_proxy
+    hostname: p2p_proxy
     entrypoint:
         - /bin/bash
         - -c
-        - cd enigma-p2p/src/cli && node cli_app.js -i B1 -b B1 -p B1 --proxy 3346; bash
+        - cd enigma-p2p/src/cli && node cli_app.js -i B1 -b B1 -p B1 --core 127.0.0.1:1543 --proxy 3346 --random-db; bash
 
   p2p-worker:
     build: 
@@ -51,7 +51,7 @@ services:
         - "8081:8081"
     networks:
         - net
-    hostname: enigma_p2p_worker
+    hostname: p2p_worker
     entrypoint:
         - /bin/bash
         - -c
@@ -82,7 +82,7 @@ services:
     tty: true
     ports:
       - "5552-5562:5552"
-    hostname: enigma_core
+    hostname: core
     networks:
       - net
 
