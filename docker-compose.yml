@@ -20,7 +20,7 @@ services:
         - ./start_ganache.bash; bash 
     volumes:
         - "built_contracts:/root/enigma-contract/build/contracts"
-        - "shared:/root/shared"
+        - "shared:/root/.enigma"
 
   p2p-proxy:
     build: 
@@ -101,7 +101,7 @@ services:
     networks:
       - net
     volumes:
-      - "shared:/root/shared"
+      - "shared:/root/.enigma"
 
 networks:
     net:

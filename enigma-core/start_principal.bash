@@ -1,11 +1,11 @@
 #!/bin/bash
-rm -f /root/shared/principal-sign-addr.txt
+rm -rf /root/.enigma/*
 
 /opt/intel/libsgx-enclave-common/aesm/aesm_service &
 sleep 5 # give time to aesm_service to start
 
 pushd /root/enigma-core/enigma-principal/bin
-RUST_BACKTRACE=1 ./enigma-principal-app -s /root/shared/principal-sign-addr.txt
+RUST_BACKTRACE=1 ./enigma-principal-app -w
 popd
 
 contract=$(getent hosts contract | awk '{ print $1 }')
