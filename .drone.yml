@@ -2,6 +2,7 @@ pipeline:
   build:
     image: docker/compose:1.23.2
     commands:
+      - docker-compose down --rmi all -v
       - cp .env-template .env
       - mkdir /root/.ssh
       - echo -n "$SSH_KEY" > /root/.ssh/id_rsa
@@ -15,7 +16,6 @@ pipeline:
   deploy:
     image: docker/compose:1.23.2
     commands:
-      - docker-compose down
       - docker-compose -f docker-compose.yml -f docker-compose.hw.yml up
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
