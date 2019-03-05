@@ -1,5 +1,5 @@
 #!/bin/bash
-rm -f /root/.enigma/principal-sign-addr.txt
+rm -f /root/.enigma/principal-sign-addr.txt ./enigma-contract/enigmacontract.txt ./enigmacontract/enigmatokencontract.txt
 until [ -f /root/.enigma/principal-sign-addr.txt ];do sleep 1; done;
 
 ganache-cli -d -p 9545 -i 4447 -h 0.0.0.0 &
