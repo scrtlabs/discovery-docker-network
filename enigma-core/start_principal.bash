@@ -5,7 +5,7 @@ rm -rf /root/.enigma/*
 sleep 5 # give time to aesm_service to start
 
 pushd /root/enigma-core/enigma-principal/bin
-RUST_BACKTRACE=1 ./enigma-principal-app -w
+. /opt/sgxsdk/environment && . /root/.cargo/env && RUST_BACKTRACE=1 ./enigma-principal-app -w
 popd
 
 contract=$(getent hosts contract | awk '{ print $1 }')

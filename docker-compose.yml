@@ -6,6 +6,7 @@ services:
     build:
       context: enigma-contract
       args:
+        - SGX_MODE=${SGX_MODE}
         - GIT_BRANCH_CONTRACT=${GIT_BRANCH_CONTRACT}
     stdin_open: true
     tty: true
