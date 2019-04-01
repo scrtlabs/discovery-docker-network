@@ -1,27 +1,11 @@
-########################################################################
-# BUILD STAGE 1
-# inherit the enigma-core image image
-FROM enigmampc/enigma-core:latest as builder
+FROM enigmampc/enigma-core:latest as runtime
 
-# Required for private repos, will be removed when repo is public
-ARG SSH_PRIVATE_KEY
-RUN mkdir /root/.ssh/
-RUN echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa
-RUN chmod 600 /root/.ssh/id_rsa
-RUN ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts
+LABEL maintainer='info@enigma.co'
 
 WORKDIR /root
 
 ARG GIT_BRANCH_CORE
-RUN git clone -b $GIT_BRANCH_CORE --single-branch git@github.com:enigmampc/enigma-core-internal.git
-RUN mv enigma-core-internal enigma-core
-
-RUN rm -f /root/.ssh/id_rsa
-
-########################################################################
-# BUILD STAGE 2 - copy the repo dir into a fresh runtime image
-FROM enigmampc/enigma-core:latest as runtime
-COPY --from=builder /root/enigma-core /root/enigma-core
+RUN git clone -b $GIT_BRANCH_CORE --single-branch https://github.com/enigmampc/enigma-core.git
 
 WORKDIR /root/enigma-core/enigma-core
 RUN . /opt/sgxsdk/environment && . /root/.cargo/env && make full-clean

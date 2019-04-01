@@ -31,19 +31,13 @@ The following is a list of the Integration Tests planned, and their status:
     $ cp .env-template .env
     ```
 
-2. Build the docker images. Because the build fetches private repositories, you need to provide your private Github SSH key (for example `~/.ssh/id_rsa`). The first time, this command can take between one or two hours. It will build and run in SGX simulation mode (Hardware mode not supported for this repo, although is fully supported in the core repo).
-
-    ```
-    $ docker-compose build --build-arg SSH_PRIVATE_KEY="$(cat ~/.ssh/id_rsa)"
-    ```
-
-3. Launch the docker network (by default runs in SGX Hardware mode, see next section for running in Simulation mode).
+2. Launch the docker network (by default runs in SGX Hardware mode, see next section for running in Simulation mode).
 
     ```
     $ ./launch.bash
     ```
 
-4. ... and then, run the integration tests:
+3. ... and then, run the integration tests:
 
     ```
     $ docker-compose run client ./start_test.bash
