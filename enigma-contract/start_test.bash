@@ -21,4 +21,5 @@ done
 
 if yarn test:integration 01_init.spec.js; then
 	yarn test:integration 02_deploy.spec.js
+	yarn test:integration 10_execute.spec.js
 fi
