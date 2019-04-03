@@ -1,4 +1,4 @@
-FROM node:10 as runtime
+FROM node:11 as runtime
 
 LABEL maintainer='info@enigma.co'
 
