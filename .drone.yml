@@ -3,15 +3,10 @@ pipeline:
     image: docker/compose:1.23.2
     commands:
       - cp .env-template .env
-      - mkdir /root/.ssh
-      - echo -n "$SSH_KEY" > /root/.ssh/id_rsa
-      - chmod 600 /root/.ssh/id_rsa
       - docker-compose down --rmi all -v
-      - docker-compose build --build-arg SSH_PRIVATE_KEY="$(cat /root/.ssh/id_rsa)" --no-cache
-      - rm /root/.ssh/id_rsa
+      - docker-compose build --no-cache
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    secrets: [ ssh_key ]
 
   deploy:
     image: docker/compose:1.23.2
