@@ -93,7 +93,7 @@ services:
       dockerfile: Dockerfile.principal
       args:
         - SGX_MODE=${SGX_MODE}
-        - GIT_BRANCH_PRINCIPAL=${GIT_BRANCH_PRINCIPAL}
+        - GIT_BRANCH_CORE=${GIT_BRANCH_CORE}
     stdin_open: true
     tty: true
     ports:

@@ -4,8 +4,8 @@ LABEL maintainer='info@enigma.co'
 
 WORKDIR /root
 
-ARG GIT_BRANCH_PRINCIPAL
-RUN git clone -b $GIT_BRANCH_PRINCIPAL --single-branch https://github.com/enigmampc/enigma-core.git
+ARG GIT_BRANCH_CORE
+RUN git clone -b $GIT_BRANCH_CORE --single-branch https://github.com/enigmampc/enigma-core.git
 
 WORKDIR /root/enigma-core/enigma-principal
 RUN . /opt/sgxsdk/environment && . /root/.cargo/env && make full-clean
