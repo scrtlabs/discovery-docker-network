@@ -3,7 +3,7 @@
 | Service | Master | Develop |
 |---------|--------|---------|
 | Drone (SGX_MODE=HW) | <img src="https://drone.enigma.co/api/badges/enigmampc/discovery-integration-tests/status.svg?branch=master"/> | <img src="https://drone.enigma.co/api/badges/enigmampc/discovery-integration-tests/status.svg?branch=develop"/> | 
-| Travis (SGX_MODE=SW) | [![Build Status](https://travis-ci.com/enigmampc/discovery-integration-tests.svg?token=cNBBjbVVEGszuAJUokFT&branch=master)](https://travis-ci.com/enigmampc/discovery-integration-tests) (Disabled) | [![Build Status](https://travis-ci.com/enigmampc/discovery-integration-tests.svg?token=cNBBjbVVEGszuAJUokFT&branch=develop)](https://travis-ci.com/enigmampc/discovery-integration-tests) (Disabled)
+| Travis (SGX_MODE=SW) | [![Build Status](https://travis-ci.com/enigmampc/discovery-integration-tests.svg?token=cNBBjbVVEGszuAJUokFT&branch=master)](https://travis-ci.com/enigmampc/discovery-integration-tests) | [![Build Status](https://travis-ci.com/enigmampc/discovery-integration-tests.svg?token=cNBBjbVVEGszuAJUokFT&branch=develop)](https://travis-ci.com/enigmampc/discovery-integration-tests) |
 
 This repository includes a suite of Integration Tests across multiple repositories for the Discovery release of the Enigma Network.
 Currently integrates with the following repositories, and their corresponding branches (eventually becoming master):
@@ -18,10 +18,22 @@ The following is a list of the Integration Tests planned, and their status:
 
 | Status | Test |
 |--------|------|
-| Pass   | Register a new worker node in the Enigma contract |
-| Pass   | Client requests encryption key from worker |
-|        | Deploy a new contract |
-|        | Compute Task |
+|   ✅   | Register a new worker node in the Enigma contract |
+|   ✅   | Client requests encryption key from worker |
+|   ✅   | Successful Deployment of a Secret Contract |
+|   WIP  | Successful Execution of a Secret Contract |
+|        | Successful Execution of a Secret Contract with an Ethereum call |
+|        | Successful Execution of successive Secret Contract in different epochs that store and retrieve state, and require successful PTT |
+|        | Successful Execution of multiple Secret Contracts deployed on the same network, and assigned to different nodes in successive epochs |
+|        | Failed Deployment of Secret Contract - Wrong Encryption Key	|
+|        | Failed Deployment of Secret Contract - Wrong Bytecode |
+|        | Failed Execution of Secret Contract - Wrong Encryption Key |
+|        | Failed Execution of Secret Contract - Wrong Params |
+|        | Failed Execution of Secret Contract - Out of Gas	|
+|        | Failed Execution of Secret Contract - Runtime Exception |
+|        | Failed Execution of Secret Contract - Wrong worker |
+|        | Failed Execution of Secret Contract - Wrong Ethereum Payload |
+
 
 ## Running the tests
 
@@ -49,3 +61,26 @@ The docker network can run both in SGX Hardware and Software (Simulation) modes.
 
 1. Edit `.env` and change `SGX_MODE=SW`, and then build the docker images (Step #2 above).
 2. Launch the network with `./launch.bash -s`
+
+## Building the Docker images
+
+The first time that you launch the network, and the images for each container are not yet available, Docker will build them automatically. 
+
+If you want to manually rebuild them at a later time, you can do so using the following command, which will only pick up local changes, but will not pick up new commits on any of the remote repos it fetches:
+```
+$ docker-compose build
+```
+
+To force a rebuild without using any of the cached previous images (to pick a more recent commit from a remote repo, for example), run:
+```
+$ docker-compose build --no-cache
+```
+
+And to rebuild only the image for one of the containers, use any of the labels that you will find in the `docker-compose.yml`:
+```
+$ docker-compose build {image_name}
+```
+where `{image_name}` is one of the following: `contract`, `p2p-proxy`, `p2p-worker`, `client`, `core`, `principal`, and which can be combined with the `--no-cache` option as follows:
+```
+$ docker-compose build --no-cache {image_name}
+```
