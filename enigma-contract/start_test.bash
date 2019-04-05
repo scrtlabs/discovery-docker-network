@@ -19,6 +19,4 @@ for filename in test/integrationTests/template.*; do
 	sed -i "s/EnigmaTokenContract.networks\['4447'\].address/'$tokenaddress'/" $(echo $filename | sed "s/template\.\(.*\).js/\1.spec.js/")
 done
 
-if yarn test:integration 01_init.spec.js; then
-	yarn test:integration 02_deploy.spec.js
-fi
+test/integrationTests/runTests.bash
