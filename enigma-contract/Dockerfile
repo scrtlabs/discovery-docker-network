@@ -7,7 +7,7 @@ WORKDIR /root
 ARG GIT_BRANCH_CONTRACT
 RUN git clone -b $GIT_BRANCH_CONTRACT --single-branch https://github.com/enigmampc/enigma-contract.git
 
-RUN apt-get update && apt-get install -y sudo net-tools netcat
+RUN apt-get update && apt-get install -y sudo net-tools netcat build-essential
 
 WORKDIR /root/enigma-contract
 
