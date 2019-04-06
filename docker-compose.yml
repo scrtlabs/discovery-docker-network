@@ -6,6 +6,7 @@ services:
     build:
       context: enigma-contract
       args:
+        - SGX_MODE=${SGX_MODE}
         - GIT_BRANCH_CONTRACT=${GIT_BRANCH_CONTRACT}
     stdin_open: true
     tty: true
@@ -13,13 +14,14 @@ services:
         - "9545:9545"
     networks:
         - net
-    hostname: enigma_contract
+    hostname: contract
     entrypoint:
         - /bin/bash
         - -c
         - ./start_ganache.bash; bash 
     volumes:
         - "built_contracts:/root/enigma-contract/build/contracts"
+        - "shared:/root/.enigma"
 
   p2p-proxy:
     build: 
@@ -33,11 +35,11 @@ services:
         - "10300:10300"
     networks:
         - net
-    hostname: enigma_p2p_proxy
+    hostname: p2p_proxy
     entrypoint:
         - /bin/bash
         - -c
-        - cd enigma-p2p/src/cli && node cli_app.js -i B1 -b B1 -p B1 --proxy 3346; bash
+        - cd enigma-p2p/src/cli && node cli_app.js -i B1 -b B1 -p B1 --core 127.0.0.1:1543 --proxy 3346 --random-db; bash
 
   p2p-worker:
     build: 
@@ -50,7 +52,7 @@ services:
         - "8081:8081"
     networks:
         - net
-    hostname: enigma_p2p_worker
+    hostname: p2p_worker
     entrypoint:
         - /bin/bash
         - -c
@@ -81,14 +83,30 @@ services:
     tty: true
     ports:
       - "5552-5562:5552"
-    devices:
-      - "/dev/isgx:/dev/isgx"
-    hostname: enigma_core
+    hostname: core
     networks:
       - net
+
+  principal:
+    build:
+      context: enigma-core
+      dockerfile: Dockerfile.principal
+      args:
+        - SGX_MODE=${SGX_MODE}
+        - GIT_BRANCH_CORE=${GIT_BRANCH_CORE}
+    stdin_open: true
+    tty: true
+    ports:
+      - "3040:3040"
+    hostname: enigma_principal
+    networks:
+      - net
+    volumes:
+      - "shared:/root/.enigma"
 
 networks:
     net:
 
 volumes:
   built_contracts:
+  shared:

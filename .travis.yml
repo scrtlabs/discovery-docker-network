@@ -12,10 +12,10 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   - cp .env-template .env
-  - docker-compose build --build-arg SSH_PRIVATE_KEY="$(cat ~/.ssh/id_rsa)"
-  - docker-compose up --no-start
-  - docker-compose start
+  - sed -i "s/SGX_MODE=HW/SGX_MODE=SW/" .env
+  - docker-compose build
+  - ./launch.bash -s &
 
 script:
-  - sleep 5 && docker exec enigma_contract_1 ./run_migrations.bash
+  - sleep 5
   - docker-compose run client ./start_test.bash

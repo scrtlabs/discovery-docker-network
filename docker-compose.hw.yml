@@ -1,0 +1,11 @@
+
+version: '3'
+
+services:
+  core:
+    devices:
+      - "/dev/isgx:/dev/isgx"
+
+  principal:
+    devices:
+      - "/dev/isgx:/dev/isgx"
