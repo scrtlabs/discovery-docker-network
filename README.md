@@ -2,7 +2,7 @@
 
 | Service | Master | Develop |
 |---------|--------|---------|
-| Drone (SGX_MODE=HW) | <img src="https://drone.enigma.co/api/badges/enigmampc/discovery-integration-tests/status.svg?branch=master"/> | <img src="https://drone.enigma.co/api/badges/enigmampc/discovery-integration-tests/status.svg?branch=develop"/> | 
+| Drone (SGX_MODE=HW) | [<img src="https://drone.enigma.co/api/badges/enigmampc/discovery-integration-tests/status.svg?branch=master"/>](https://drone.enigma.co/enigmampc/discovery-integration-tests) | [<img src="https://drone.enigma.co/api/badges/enigmampc/discovery-integration-tests/status.svg?branch=develop"/>](https://drone.enigma.co/enigmampc/discovery-integration-tests) | 
 | Travis (SGX_MODE=SW) | [![Build Status](https://travis-ci.com/enigmampc/discovery-integration-tests.svg?token=cNBBjbVVEGszuAJUokFT&branch=master)](https://travis-ci.com/enigmampc/discovery-integration-tests) | [![Build Status](https://travis-ci.com/enigmampc/discovery-integration-tests.svg?token=cNBBjbVVEGszuAJUokFT&branch=develop)](https://travis-ci.com/enigmampc/discovery-integration-tests) |
 
 This repository includes a suite of Integration Tests across multiple repositories for the Discovery release of the Enigma Network.
@@ -21,12 +21,12 @@ The following is a list of the Integration Tests planned, and their status:
 |   ✅   | Register a new worker node in the Enigma contract |
 |   ✅   | Client requests encryption key from worker |
 |   ✅   | Successful Deployment of a Secret Contract |
-|   WIP  | Successful Execution of a Secret Contract |
+|   ✅   | Successful Execution of a Secret Contract |
 |        | Successful Execution of a Secret Contract with an Ethereum call |
 |        | Successful Execution of successive Secret Contract in different epochs that store and retrieve state, and require successful PTT |
 |        | Successful Execution of multiple Secret Contracts deployed on the same network, and assigned to different nodes in successive epochs |
 |        | Failed Deployment of Secret Contract - Wrong Encryption Key	|
-|        | Failed Deployment of Secret Contract - Wrong Bytecode |
+|   ✅   | Failed Deployment of Secret Contract - Wrong Bytecode |
 |        | Failed Execution of Secret Contract - Wrong Encryption Key |
 |        | Failed Execution of Secret Contract - Wrong Params |
 |        | Failed Execution of Secret Contract - Out of Gas	|
