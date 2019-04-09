@@ -2,10 +2,10 @@
 cd /root/enigma-contract/enigma-js
 
 echo "Waiting for p2p-worker..."
-until curl -s -m 1 p2p-worker:3346; do sleep 5; done
+until curl -s -m 1 p2p-worker:3346; do sleep 3; done
 
 echo "Waiting for p2p-worker to register..."
-sleep 7
+sleep 5
 
 proxy=$(getent hosts p2p-proxy | awk '{ print $1 }')
 contract=$(getent hosts contract | awk '{ print $1 }')
