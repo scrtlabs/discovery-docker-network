@@ -10,29 +10,11 @@ Currently integrates with the following repositories, and their corresponding br
 
 | Repo   | Branch | Build |
 |--------|--------|-------|
-| [enigma-contract-internal](https://github.com/enigmampc/enigma-contract-internal/tree/integration-tests) | integration-tests | [![Build Status](https://travis-ci.com/enigmampc/enigma-contract-internal.svg?token=cNBBjbVVEGszuAJUokFT&branch=integration-tests)](https://travis-ci.com/enigmampc/enigma-contract-internal) |
+| [enigma-contract](https://github.com/enigmampc/enigma-contract/tree/develop) | develop | [![Build Status](https://travis-ci.com/enigmampc/enigma-contract-develop.svg?token=cNBBjbVVEGszuAJUokFT&branch=integration-tests)](https://travis-ci.com/enigmampc/enigma-contract) |
 | [enigma-p2p](https://github.com/enigmampc/enigma-p2p/tree/jsonrpc-integration) | jsonrpc-integration|[![Build Status](https://travis-ci.com/enigmampc/enigma-p2p.svg?token=cNBBjbVVEGszuAJUokFT&branch=jsonrpc-integration)](https://travis-ci.com/enigmampc/enigma-p2p) |
-| [enigma-core-internal](https://github.com/enigmampc/enigma-core-internal/tree/main) | develop | <img src="https://drone.enigma.co/api/badges/enigmampc/enigma-core-internal/status.svg?branch=develop"/> |
+| [enigma-core](https://github.com/enigmampc/enigma-core/tree/develop) | develop | <img src="https://drone.enigma.co/api/badges/enigmampc/enigma-core/status.svg?branch=develop"/> |
 
-The following is a list of the Integration Tests planned, and their status:
-
-| Status | Test |
-|--------|------|
-|   ✅   | Register a new worker node in the Enigma contract |
-|   ✅   | Client requests encryption key from worker |
-|   ✅   | Successful Deployment of a Secret Contract |
-|   ✅   | Successful Execution of a Secret Contract |
-|        | Successful Execution of a Secret Contract with an Ethereum call |
-|        | Successful Execution of successive Secret Contract in different epochs that store and retrieve state, and require successful PTT |
-|        | Successful Execution of multiple Secret Contracts deployed on the same network, and assigned to different nodes in successive epochs |
-|        | Failed Deployment of Secret Contract - Wrong Encryption Key	|
-|   ✅   | Failed Deployment of Secret Contract - Wrong Bytecode |
-|        | Failed Execution of Secret Contract - Wrong Encryption Key |
-|        | Failed Execution of Secret Contract - Wrong Params |
-|        | Failed Execution of Secret Contract - Out of Gas	|
-|        | Failed Execution of Secret Contract - Runtime Exception |
-|        | Failed Execution of Secret Contract - Wrong worker |
-|        | Failed Execution of Secret Contract - Wrong Ethereum Payload |
+Refer to [Issue #2](https://github.com/enigmampc/discovery-integration-tests/issues/2) for the status of the integration tests.
 
 
 ## Running the tests
@@ -54,6 +36,37 @@ The following is a list of the Integration Tests planned, and their status:
     ```
     $ docker-compose run client ./start_test.bash
     ```
+
+## Running individual tests
+
+After following steps 1 and 2 above, do the following:
+
+3. Enter the "client" container:
+
+	```
+	$ docker-compose run client /bin/bash
+	```
+
+4. Change folders, and create an empty file:
+
+	```
+	root@client:~# cd enigma-contract/enigma-js/test/integrationTests
+	root@client:~/enigma-contract/enigma-js/test/integrationTests# touch testList.txt
+	```
+
+5. Generate all the test files from the corresponding templates (and run no tests because `testList.txt` exists and is empty):
+
+	```
+	root@client:~/enigma-contract/enigma-js/test/integrationTests# ~/start_test.bash
+	```
+
+6. Run individual tests as needed:
+
+	```
+	root@client:~/enigma-contract/enigma-js/test/integrationTests# yarn test:integration 01_init.spec.js 
+	root@client:~/enigma-contract/enigma-js/test/integrationTests# yarn test:integration 02_deploy_addition.spec.js
+	root@client:~/enigma-contract/enigma-js/test/integrationTests# yarn test:integration 10_execute_addition.spec.js
+	```
     
 ## Simulation mode
 
