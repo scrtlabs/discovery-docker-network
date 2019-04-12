@@ -1,5 +1,12 @@
 #!/bin/bash
 
+if [ -z ${NODES+x} ]; then 
+	echo "Environment variable NODES is not set, defaulting to 1."
+	NODES=1
+else
+ 	echo "NODES is set to $NODES"
+fi
+
 function help() {
 	echo "Launches a dockerized version of the Enigma Discovery network."
 	echo
@@ -47,4 +54,4 @@ if [ ! $SIMUL ]; then
 	ARGF="$ARGF -f docker-compose.hw.yml"
 fi
 
-docker-compose $ARGF up
+NODES=$NODES docker-compose $ARGF up --scale core=$NODES --scale p2p=$NODES 

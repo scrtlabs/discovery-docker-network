@@ -11,52 +11,54 @@ services:
     stdin_open: true
     tty: true
     ports:
-        - "9545:9545"
+      - "9545:9545"
     networks:
-        - net
+      - net
     hostname: contract
     entrypoint:
-        - /bin/bash
-        - -c
-        - ./start_ganache.bash; bash 
+      - /bin/bash
+      - -c
+      - ./start_ganache.bash; bash 
     volumes:
-        - "built_contracts:/root/enigma-contract/build/contracts"
-        - "shared:/root/.enigma"
+      - "built_contracts:/root/enigma-contract/build/contracts"
+      - "shared:/root/.enigma"
 
-  p2p-proxy:
+  # p2p-proxy:
+  #   build: 
+  #     context: enigma-p2p
+  #     args:
+  #       - GIT_BRANCH_P2P=${GIT_BRANCH_P2P}
+  #   stdin_open: true
+  #   tty: true
+  #   ports:
+  #       - "3346:3346"
+  #       - "10300:10300"
+  #   networks:
+  #       - net
+  #   hostname: p2p_proxy
+  #   entrypoint:
+  #       - /bin/bash
+  #       - -c
+  #       - cd enigma-p2p/src/cli && node cli_app.js -i B1 -b B1 -p B1 --core 127.0.0.1:1543 --proxy 3346 --random-db; bash
+  #   volumes:
+  #       - "/home/eng-user/enigma-p2p:/root/enigma-p2p"
+
+  p2p:
     build: 
       context: enigma-p2p
       args:
         - GIT_BRANCH_P2P=${GIT_BRANCH_P2P}
     stdin_open: true
     tty: true
-    ports:
-        - "3346:3346"
-        - "10300:10300"
     networks:
-        - net
-    hostname: p2p_proxy
+      - net
+    hostname: p2p
     entrypoint:
-        - /bin/bash
-        - -c
-        - cd enigma-p2p/src/cli && node cli_app.js -i B1 -b B1 -p B1 --core 127.0.0.1:1543 --proxy 3346 --random-db; bash
-
-  p2p-worker:
-    build: 
-      context: enigma-p2p
-      args:
-        - GIT_BRANCH_P2P=${GIT_BRANCH_P2P}
-    stdin_open: true
-    tty: true
-    ports:
-        - "8081:8081"
-    networks:
-        - net
-    hostname: p2p_worker
-    entrypoint:
-        - /bin/bash
-        - -c
-        - ./start_worker.bash; bash
+      - /bin/bash
+      - -c
+      - ./start_worker.bash; bash
+    environment:
+      - NETWORK=${COMPOSE_PROJECT_NAME}
     volumes:
         - "built_contracts:/root/enigma-p2p/test/ethereum/scripts/build/contracts"
 
@@ -68,10 +70,13 @@ services:
     stdin_open: true
     tty: true
     networks:
-        - net
+      - net
     hostname: client
+    environment:
+      - NETWORK=${COMPOSE_PROJECT_NAME}
+      - NODES
     volumes:
-        - "built_contracts:/root/enigma-contract/build/contracts"
+      - "built_contracts:/root/enigma-contract/build/contracts"
 
   core:
     build:
@@ -81,8 +86,6 @@ services:
         - GIT_BRANCH_CORE=${GIT_BRANCH_CORE}
     stdin_open: true
     tty: true
-    ports:
-      - "5552-5562:5552"
     hostname: core
     networks:
       - net
