@@ -17,7 +17,7 @@ RUN cd enigma-js && yarn install
 
 WORKDIR /root
 COPY start_test.bash .
-COPY start_ganache.bash .
+COPY launch_ganache.bash .
 COPY simpleHTTP1.bash .
 COPY simpleHTTP2.bash .
 RUN mkdir -p /root/.enigma
