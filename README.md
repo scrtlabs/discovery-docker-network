@@ -1,4 +1,4 @@
-# discovery-integration-tests
+# Discovery Integration Tests
 
 | Service | Master | Develop |
 |---------|--------|---------|
@@ -10,9 +10,10 @@ Currently integrates with the following repositories, and their corresponding br
 
 | Repo   | Branch | Build |
 |--------|--------|-------|
-| [enigma-contract](https://github.com/enigmampc/enigma-contract/tree/develop) | develop | [![Build Status](https://travis-ci.com/enigmampc/enigma-contract-develop.svg?token=cNBBjbVVEGszuAJUokFT&branch=integration-tests)](https://travis-ci.com/enigmampc/enigma-contract) |
-| [enigma-p2p](https://github.com/enigmampc/enigma-p2p/tree/jsonrpc-integration) | jsonrpc-integration|[![Build Status](https://travis-ci.com/enigmampc/enigma-p2p.svg?token=cNBBjbVVEGszuAJUokFT&branch=jsonrpc-integration)](https://travis-ci.com/enigmampc/enigma-p2p) |
+| [enigma-contract](https://github.com/enigmampc/enigma-contract/tree/develop) | develop | [![Build Status](https://travis-ci.org/enigmampc/enigma-contract.svg?branch=develop)](https://travis-ci.org/enigmampc/enigma-contract) |
+| [enigma-p2p](https://github.com/enigmampc/enigma-p2p/tree/jsonrpc-integration) | jsonrpc-integration|[![Build Status](https://travis-ci.org/enigmampc/enigma-p2p.svg?branch=jsonrpc-integration)](https://travis-ci.org/enigmampc/enigma-p2p) |
 | [enigma-core](https://github.com/enigmampc/enigma-core/tree/develop) | develop | <img src="https://drone.enigma.co/api/badges/enigmampc/enigma-core/status.svg?branch=develop"/> |
+
 
 Refer to [Issue #2](https://github.com/enigmampc/discovery-integration-tests/issues/2) for the status of the integration tests.
 
@@ -97,3 +98,45 @@ where `{image_name}` is one of the following: `contract`, `p2p-proxy`, `p2p-work
 ```
 $ docker-compose build --no-cache {image_name}
 ```
+
+## Mounting volumes for development
+
+By default, each of the container images are built pulling the latest version of their corresponding repositories, using the branches specified in `.env` (see Step 1 in "Running the tests" section above). There are instances in which you may want to use a local copy of that repository where you can introduce changes and test them on the network.
+
+In order to do that you do the following:
+
+1. Clone either one of the three repositories ([contract](https://github.com/enigmampc/enigma-contract), [core](https://github.com/enigmampc/enigma-core), [p2p](https://github.com/enigmampc/enigma-p2p)) that you are interested in, for example the contract:
+	
+    ```
+    $ git clone https://github.com/enigmampc/enigma-contract.git
+    ```
+
+2. Edit the `docker-compose.yml` file and add a line in the `volumes` section (you may need to create that section if it's not present in the config for that container) to the container you are interested in, mapping the local folder to where you have cloned the repo to the corresponding folder inside that container (`local_folder:folder_in_container`). Again using the contract as an example, the relevant section would become:
+
+     ```
+    client:
+      build:
+        context: enigma-contract
+        args:
+          - GIT_BRANCH_CONTRACT=${GIT_BRANCH_CONTRACT}
+      stdin_open: true
+      tty: true
+      networks:
+        - net
+      hostname: client
+      volumes:
+        - "built_contracts:/root/enigma-contract/build/contracts"
+        - "/path_to/enigma-contract:/root/enigma-contract"
+      ```
+      
+Use the following folders for each of these containers:
+
+| Container | Repo folder inside container |
+|-----------|------------------------------|
+| client   | /root/enigma-contract |
+| contract   | /root/enigma-contract |
+| p2p-proxy  | /root/enigma-p2p |
+| p2p-worker | /root/enigma-p2p |
+| core       | /root/enigma-core |
+| principal  | /root/enigma-core |
+      
