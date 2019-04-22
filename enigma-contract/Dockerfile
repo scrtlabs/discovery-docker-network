@@ -22,8 +22,5 @@ COPY simpleHTTP1.bash .
 COPY simpleHTTP2.bash .
 RUN mkdir -p /root/.enigma
 
-ARG SGX_MODE
-ENV SGX_MODE=$SGX_MODE
-
 ENTRYPOINT ["/usr/bin/env"]
 CMD ["/bin/bash"]
