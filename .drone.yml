@@ -3,6 +3,7 @@ pipeline:
     image: docker/compose:1.23.2
     commands:
       - cp .env-template .env
+      - docker network prune -f
       - docker-compose down --rmi all -v
       - docker-compose build --no-cache
     volumes:
