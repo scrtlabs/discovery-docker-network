@@ -4,7 +4,12 @@ if [ -z ${NODES+x} ]; then
 	echo "Environment variable NODES is not set, defaulting to 1."
 	NODES=1
 else
- 	echo "NODES is set to $NODES"
+	if [ $NODES -gt 9 ]; then
+		echo "NODES is set too large, reverting to the maximum 9 allowed."
+		NODES=9
+	else
+		echo "NODES is set to $NODES"
+	fi
 fi
 
 function help() {
