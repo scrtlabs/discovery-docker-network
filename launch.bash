@@ -1,27 +1,48 @@
 #!/bin/bash
 
-if [ -z ${NODES+x} ]; then 
-	echo "Environment variable NODES is not set, defaulting to 1."
-	NODES=1
-else
-	if [ $NODES -gt 9 ]; then
-		echo "NODES is set too large, reverting to the maximum 9 allowed."
-		NODES=9
+function init() {
+	# Get the folder where the script is located
+	SELFDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+	# cd into that folder to reference folders relative to it
+	pushd $SELFDIR > /dev/null 2>&1
+
+	# Load environment variables from file
+	source .env
+
+	# Check SGX_MODE and inform the user
+	if [ "$SGX_MODE" = "HW" ]; then
+		echo "Running in Hardware Mode, as per SGX_MODE=HW in .env file."
+	elif [ "$SGX_MODE" = "SW" ]; then
+		echo "Running in Simulation Mode, as per SGX_MODE=SW in .env file."
 	else
-		echo "NODES is set to $NODES"
+		echo "SGX_MODE not set to either HW or SW in .env file. Exiting..."
+		exit 1
 	fi
-fi
+
+	# Check NODES and set within the allowed values 0 < NODES < 10
+	if [ -z ${NODES+x} ]; then
+		echo "Environment variable NODES is not set, defaulting to 1."
+		NODES=1
+	else
+		if [ $NODES -gt 9 ]; then
+			echo "NODES is set too large, reverting to the maximum 9 allowed."
+			NODES=9
+		else
+			echo "NODES is set to $NODES"
+		fi
+	fi
+}
 
 function help() {
 	echo "Launches a dockerized version of the Enigma Discovery network."
 	echo
 	echo "Usage:"
-	echo "	$0 [-h] [-s] [-q]"
+	echo "	$0 [-h] [-q]"
 	echo
 	echo "Options:"
 	echo "  -h    Show this help."
 	echo "  -q    Stops Enigma Docker Network and removes containers."
-	echo "  -s    Run in Simulation mode."
 }
 
 function check_config() {
@@ -32,11 +53,9 @@ function check_config() {
 }
 
 check_config
+init
 
 ARGF="-f docker-compose.yml"
-
-# By default we run in HW mode, which can be overriden through option below
-sed -e 's/SGX_MODE=.*/SGX_MODE=HW/g' .env > .env.tmp && mv .env.tmp .env
 
 while getopts ":hqs" opt; do
 	case $opt in
@@ -44,13 +63,10 @@ while getopts ":hqs" opt; do
 		   exit 0;;
 		q) docker-compose down
 		   exit 0;;
-		s) SIMUL=True
-		   sed -e 's/SGX_MODE=.*/SGX_MODE=SW/g' .env > .env.tmp && mv .env.tmp .env;
-		   echo "Running in SGX Simulation mode."
 	esac
 done
 
-if [ ! $SIMUL ]; then
+if [ "$SGX_MODE" = "HW" ]; then
 	if [ ! -c /dev/isgx ]; then
 		echo "Error: SGX driver not found. Run in simulation mode instead with:"
 		echo "$0 $@ -s"
