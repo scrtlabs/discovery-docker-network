@@ -17,6 +17,8 @@ services:
       - /bin/bash
       - -c
       - ./launch_ganache.bash; bash
+    environment:
+      - SGX_MODE=${SGX_MODE}
     volumes:
       - "built_contracts:/root/enigma-contract/build/contracts"
       - "shared:/root/.enigma"
