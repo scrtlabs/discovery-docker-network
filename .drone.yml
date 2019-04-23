@@ -3,8 +3,8 @@ pipeline:
     image: docker/compose:1.23.2
     commands:
       - cp .env-template .env
-      - docker network prune -f
-      - docker-compose down --rmi all -v
+      - docker network prune -f || true
+      - docker-compose down --rmi all -v || true
       - docker-compose build --no-cache
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
