@@ -56,6 +56,10 @@ check_config
 init
 
 ARGF="-f docker-compose.yml"
+if [ -f docker-compose.vol.yml ]; then
+	ARGF="$ARGF -f docker-compose.vol.yml"
+	echo 'Mounting volumes from docker-compose.vol.yml'
+fi
 
 while getopts ":hqs" opt; do
 	case $opt in

@@ -43,7 +43,9 @@ echo "core_${INDEX} is ready!"
 echo "Waiting for Principal Node to start..."
 until curl -s -m 1 principal:3040 >/dev/null 2>&1; do sleep 2; done
 
-ENIGMACONTRACT="$(curl -s http://contract:8081)"
+while [ -z $ENIGMACONTRACT ]; do
+	ENIGMACONTRACT="$(curl -s http://contract:8081)"
+done
 echo "Enigma Contract Address is : $ENIGMACONTRACT"
 
 CONTRACT=$(getent hosts contract | awk '{ print $1 }')
