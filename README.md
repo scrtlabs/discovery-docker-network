@@ -26,7 +26,7 @@ Refer to [Issue #2](https://github.com/enigmampc/discovery-integration-tests/iss
     $ cp .env-template .env
     ```
 
-2. Launch the docker network (by default runs in SGX Hardware mode, see next section for running in Simulation mode).
+2. Launch the docker network (by default runs in SGX Hardware mode, and with only one workers, see next sections to change these settings).
 
     ```
     $ ./launch.bash
@@ -75,6 +75,20 @@ The docker network can run both in SGX Hardware and Software (Simulation) modes.
 
 1. Edit `.env` and change `SGX_MODE=SW`, and then build the docker images (Step #2 above).
 2. Launch the network with `./launch.bash -s`
+
+## Running multiple workers
+
+The number of worker nodes (a pair of `core` + `p2p` makes up one worker node) is controlled by the environment variable `NODES`, which defaults to `1` if not set. The maximum number of worker nodes is 9. For example, to launch the network with 3 nodes, run:
+
+```
+$ NODES=3 ./launch.bash
+```
+
+Advanced Tip: If you want to manually enter any `p2p` or `core` container when there is more than one, you use the `--index` parameter as follows (e.g. enter the second `p2p` container):
+
+```
+$ docker-compose exec --index=2 p2p /bin/bash
+```
 
 ## Building the Docker images
 
