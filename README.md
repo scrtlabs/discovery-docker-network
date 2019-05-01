@@ -11,7 +11,7 @@ Currently integrates with the following repositories, and their corresponding br
 | Repo   | Branch | Build |
 |--------|--------|-------|
 | [enigma-contract](https://github.com/enigmampc/enigma-contract/tree/develop) | develop | [![Build Status](https://travis-ci.org/enigmampc/enigma-contract.svg?branch=develop)](https://travis-ci.org/enigmampc/enigma-contract) |
-| [enigma-p2p](https://github.com/enigmampc/enigma-p2p/tree/jsonrpc-integration) | jsonrpc-integration|[![Build Status](https://travis-ci.org/enigmampc/enigma-p2p.svg?branch=jsonrpc-integration)](https://travis-ci.org/enigmampc/enigma-p2p) |
+| [enigma-p2p](https://github.com/enigmampc/enigma-p2p/tree/jsonrpc-integration) | develop |[![Build Status](https://travis-ci.org/enigmampc/enigma-p2p.svg?branch=develop)](https://travis-ci.org/enigmampc/enigma-p2p) |
 | [enigma-core](https://github.com/enigmampc/enigma-core/tree/develop) | develop | <img src="https://drone.enigma.co/api/badges/enigmampc/enigma-core/status.svg?branch=develop"/> |
 
 
@@ -65,8 +65,8 @@ After following steps 1 and 2 above, do the following:
 
 	```
 	root@client:~/enigma-contract/enigma-js/test/integrationTests# yarn test:integration 01_init.spec.js 
-	root@client:~/enigma-contract/enigma-js/test/integrationTests# yarn test:integration 02_deploy_addition.spec.js
-	root@client:~/enigma-contract/enigma-js/test/integrationTests# yarn test:integration 10_execute_addition.spec.js
+	root@client:~/enigma-contract/enigma-js/test/integrationTests# yarn test:integration 02_deploy_calculator.spec.js
+	root@client:~/enigma-contract/enigma-js/test/integrationTests# yarn test:integration 10_execute_calculator.spec.js
 	```
     
 ## Simulation mode
