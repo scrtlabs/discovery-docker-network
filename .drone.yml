@@ -3,6 +3,7 @@ pipeline:
     image: docker/compose:1.23.2
     commands:
       - cp .env-template .env
+      - sed -i "s/COMPOSE_PROJECT_NAME=.*/COMPOSE_PROJECT_NAME=enigma_${DRONE_BUILD_NUMBER}/" .env
       - docker network prune -f || true
       - docker-compose down --rmi all -v || true
       - docker-compose build --no-cache
