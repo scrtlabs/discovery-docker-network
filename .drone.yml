@@ -16,7 +16,7 @@ steps:
   - name: deploy
     image: docker/compose:1.23.2
     commands:
-      - docker-compose -f docker-compose.yml -f docker-compose.hw.yml up
+      - docker-compose -f docker-compose.yml -f docker-compose.hw.yml --exit-code-from client up
     volumes:
       - name: dockersock
         path: /var/run/docker.sock
