@@ -9,14 +9,16 @@ steps:
       - docker-compose down --rmi all -v || true
       - docker-compose build --no-cache
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - name: dockersock
+        path: /var/run/docker.sock
 
   - name: deploy
     image: docker/compose:1.23.2
     commands:
       - docker-compose -f docker-compose.yml -f docker-compose.hw.yml up
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - name: dockersock
+        path: /var/run/docker.sock
       - name: isgx
         path: /dev/isgx
     detach: true
@@ -26,16 +28,21 @@ steps:
     commands:
       - docker-compose run client ./start_test.bash
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - name: dockersock
+        path: /var/run/docker.sock
 
   - name: cleanup
     image: docker/compose:1.23.2
     commands:
       - docker-compose down
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - name: dockersock
+        path: /var/run/docker.sock
 
 volumes:
   - name: isgx
     host:
       path: /dev/isgx
+  - name: dockersock
+    host:
+      path: /var/run/docker.sock
