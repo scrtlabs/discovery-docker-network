@@ -154,3 +154,6 @@ Use the following folders for each of these containers:
 | core       | /root/enigma-core |
 | principal  | /root/enigma-core |
       
+## Troubleshooting	
+
+See the [Troubleshooting](https://github.com/enigmampc/discovery-integration-tests/blob/master/docs/troubleshooting.md document for the most common errors and how to solve them.
