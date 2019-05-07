@@ -1,8 +1,8 @@
-# discovery-integration-tests
+# Discovery Integration Tests
 
 | Service | Master | Develop |
 |---------|--------|---------|
-| Drone (SGX_MODE=HW) | <img src="https://drone.enigma.co/api/badges/enigmampc/discovery-integration-tests/status.svg?branch=master"/> | <img src="https://drone.enigma.co/api/badges/enigmampc/discovery-integration-tests/status.svg?branch=develop"/> | 
+| Drone (SGX_MODE=HW) | [<img src="https://drone.enigma.co/api/badges/enigmampc/discovery-integration-tests/status.svg?branch=master"/>](https://drone.enigma.co/enigmampc/discovery-integration-tests) | [<img src="https://drone.enigma.co/api/badges/enigmampc/discovery-integration-tests/status.svg?branch=develop"/>](https://drone.enigma.co/enigmampc/discovery-integration-tests) | 
 | Travis (SGX_MODE=SW) | [![Build Status](https://travis-ci.com/enigmampc/discovery-integration-tests.svg?token=cNBBjbVVEGszuAJUokFT&branch=master)](https://travis-ci.com/enigmampc/discovery-integration-tests) | [![Build Status](https://travis-ci.com/enigmampc/discovery-integration-tests.svg?token=cNBBjbVVEGszuAJUokFT&branch=develop)](https://travis-ci.com/enigmampc/discovery-integration-tests) |
 
 This repository includes a suite of Integration Tests across multiple repositories for the Discovery release of the Enigma Network.
@@ -10,29 +10,12 @@ Currently integrates with the following repositories, and their corresponding br
 
 | Repo   | Branch | Build |
 |--------|--------|-------|
-| [enigma-contract-internal](https://github.com/enigmampc/enigma-contract-internal/tree/integration-tests) | integration-tests | [![Build Status](https://travis-ci.com/enigmampc/enigma-contract-internal.svg?token=cNBBjbVVEGszuAJUokFT&branch=integration-tests)](https://travis-ci.com/enigmampc/enigma-contract-internal) |
-| [enigma-p2p](https://github.com/enigmampc/enigma-p2p/tree/jsonrpc-integration) | jsonrpc-integration|[![Build Status](https://travis-ci.com/enigmampc/enigma-p2p.svg?token=cNBBjbVVEGszuAJUokFT&branch=jsonrpc-integration)](https://travis-ci.com/enigmampc/enigma-p2p) |
-| [enigma-core-internal](https://github.com/enigmampc/enigma-core-internal/tree/main) | develop | <img src="https://drone.enigma.co/api/badges/enigmampc/enigma-core-internal/status.svg?branch=develop"/> |
+| [enigma-contract](https://github.com/enigmampc/enigma-contract/tree/develop) | develop | [![Build Status](https://travis-ci.org/enigmampc/enigma-contract.svg?branch=develop)](https://travis-ci.org/enigmampc/enigma-contract) |
+| [enigma-p2p](https://github.com/enigmampc/enigma-p2p/tree/jsonrpc-integration) | develop |[![Build Status](https://travis-ci.org/enigmampc/enigma-p2p.svg?branch=develop)](https://travis-ci.org/enigmampc/enigma-p2p) |
+| [enigma-core](https://github.com/enigmampc/enigma-core/tree/develop) | develop | <img src="https://drone.enigma.co/api/badges/enigmampc/enigma-core/status.svg?branch=develop"/> |
 
-The following is a list of the Integration Tests planned, and their status:
 
-| Status | Test |
-|--------|------|
-|   ✅   | Register a new worker node in the Enigma contract |
-|   ✅   | Client requests encryption key from worker |
-|   ✅   | Successful Deployment of a Secret Contract |
-|   WIP  | Successful Execution of a Secret Contract |
-|        | Successful Execution of a Secret Contract with an Ethereum call |
-|        | Successful Execution of successive Secret Contract in different epochs that store and retrieve state, and require successful PTT |
-|        | Successful Execution of multiple Secret Contracts deployed on the same network, and assigned to different nodes in successive epochs |
-|        | Failed Deployment of Secret Contract - Wrong Encryption Key	|
-|        | Failed Deployment of Secret Contract - Wrong Bytecode |
-|        | Failed Execution of Secret Contract - Wrong Encryption Key |
-|        | Failed Execution of Secret Contract - Wrong Params |
-|        | Failed Execution of Secret Contract - Out of Gas	|
-|        | Failed Execution of Secret Contract - Runtime Exception |
-|        | Failed Execution of Secret Contract - Wrong worker |
-|        | Failed Execution of Secret Contract - Wrong Ethereum Payload |
+Refer to [Issue #2](https://github.com/enigmampc/discovery-integration-tests/issues/2) for the status of the integration tests.
 
 
 ## Running the tests
@@ -43,7 +26,7 @@ The following is a list of the Integration Tests planned, and their status:
     $ cp .env-template .env
     ```
 
-2. Launch the docker network (by default runs in SGX Hardware mode, see next section for running in Simulation mode).
+2. Launch the docker network (by default runs in SGX Hardware mode, and with only one workers, see next sections to change these settings).
 
     ```
     $ ./launch.bash
@@ -54,6 +37,37 @@ The following is a list of the Integration Tests planned, and their status:
     ```
     $ docker-compose run client ./start_test.bash
     ```
+
+## Running individual tests
+
+After following steps 1 and 2 above, do the following:
+
+3. Enter the "client" container:
+
+	```
+	$ docker-compose run client /bin/bash
+	```
+
+4. Change folders, and create an empty file:
+
+	```
+	root@client:~# cd enigma-contract/enigma-js/test/integrationTests
+	root@client:~/enigma-contract/enigma-js/test/integrationTests# touch testList.txt
+	```
+
+5. Generate all the test files from the corresponding templates (and run no tests because `testList.txt` exists and is empty):
+
+	```
+	root@client:~/enigma-contract/enigma-js/test/integrationTests# ~/start_test.bash
+	```
+
+6. Run individual tests as needed:
+
+	```
+	root@client:~/enigma-contract/enigma-js/test/integrationTests# yarn test:integration 01_init.spec.js 
+	root@client:~/enigma-contract/enigma-js/test/integrationTests# yarn test:integration 02_deploy_calculator.spec.js
+	root@client:~/enigma-contract/enigma-js/test/integrationTests# yarn test:integration 10_execute_calculator.spec.js
+	```
     
 ## Simulation mode
 
@@ -61,6 +75,20 @@ The docker network can run both in SGX Hardware and Software (Simulation) modes.
 
 1. Edit `.env` and change `SGX_MODE=SW`, and then build the docker images (Step #2 above).
 2. Launch the network with `./launch.bash -s`
+
+## Running multiple workers
+
+The number of worker nodes (a pair of `core` + `p2p` makes up one worker node) is controlled by the environment variable `NODES`, which defaults to `1` if not set. The maximum number of worker nodes is 9. For example, to launch the network with 3 nodes, run:
+
+```
+$ NODES=3 ./launch.bash
+```
+
+Advanced Tip: If you want to manually enter any `p2p` or `core` container when there is more than one, you use the `--index` parameter as follows (e.g. enter the second `p2p` container):
+
+```
+$ docker-compose exec --index=2 p2p /bin/bash
+```
 
 ## Building the Docker images
 
@@ -84,3 +112,48 @@ where `{image_name}` is one of the following: `contract`, `p2p-proxy`, `p2p-work
 ```
 $ docker-compose build --no-cache {image_name}
 ```
+
+## Mounting volumes for development
+
+By default, each of the container images are built pulling the latest version of their corresponding repositories, using the branches specified in `.env` (see Step 1 in "Running the tests" section above). There are instances in which you may want to use a local copy of that repository where you can introduce changes and test them on the network.
+
+In order to do that you do the following:
+
+1. Clone either one of the three repositories ([contract](https://github.com/enigmampc/enigma-contract), [core](https://github.com/enigmampc/enigma-core), [p2p](https://github.com/enigmampc/enigma-p2p)) that you are interested in, for example the contract:
+	
+    ```
+    $ git clone https://github.com/enigmampc/enigma-contract.git
+    ```
+
+2. Edit the `docker-compose.yml` file and add a line in the `volumes` section (you may need to create that section if it's not present in the config for that container) to the container you are interested in, mapping the local folder to where you have cloned the repo to the corresponding folder inside that container (`local_folder:folder_in_container`). Again using the contract as an example, the relevant section would become:
+
+     ```
+    client:
+      build:
+        context: enigma-contract
+        args:
+          - GIT_BRANCH_CONTRACT=${GIT_BRANCH_CONTRACT}
+      stdin_open: true
+      tty: true
+      networks:
+        - net
+      hostname: client
+      volumes:
+        - "built_contracts:/root/enigma-contract/build/contracts"
+        - "/path_to/enigma-contract:/root/enigma-contract"
+      ```
+      
+Use the following folders for each of these containers:
+
+| Container | Repo folder inside container |
+|-----------|------------------------------|
+| client   | /root/enigma-contract |
+| contract   | /root/enigma-contract |
+| p2p-proxy  | /root/enigma-p2p |
+| p2p-worker | /root/enigma-p2p |
+| core       | /root/enigma-core |
+| principal  | /root/enigma-core |
+      
+## Troubleshooting	
+
+See the [Troubleshooting](https://github.com/enigmampc/discovery-integration-tests/blob/master/docs/troubleshooting.md) document for the most common errors and how to solve them.

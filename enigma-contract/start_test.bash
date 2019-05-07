@@ -1,13 +1,16 @@
 #!/bin/bash
+
+# Environment variable NETWORK is set through docker-compose.yml
+
 cd /root/enigma-contract/enigma-js
 
-echo "Waiting for p2p-worker..."
-until curl -s -m 1 p2p-worker:3346; do sleep 5; done
+echo "Waiting for ${NETWORK}_p2p_1..."
+until curl -s -m 1 ${NETWORK}_p2p_1:3346; do sleep 3; done
 
-echo "Waiting for p2p-worker to register..."
-sleep 7
+echo "Waiting for ${NETWORK}_p2p_1 to register..."
+sleep 5
 
-proxy=$(getent hosts p2p-proxy | awk '{ print $1 }')
+proxy=$(getent hosts ${NETWORK}_p2p_1 | awk '{ print $1 }')
 contract=$(getent hosts contract | awk '{ print $1 }')
 contractaddress=$(curl -s http://contract:8081)
 tokenaddress=$(curl -s http://contract:8082)
