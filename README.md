@@ -156,4 +156,4 @@ Use the following folders for each of these containers:
       
 ## Troubleshooting	
 
-See the [Troubleshooting](https://github.com/enigmampc/discovery-integration-tests/blob/master/docs/troubleshooting.md document for the most common errors and how to solve them.
+See the [Troubleshooting](https://github.com/enigmampc/discovery-integration-tests/blob/master/docs/troubleshooting.md) document for the most common errors and how to solve them.
