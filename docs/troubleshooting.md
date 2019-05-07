@@ -23,3 +23,28 @@ p2p_1        |     at Module._compile (internal/modules/cjs/loader.js:805:30)
 p2p_1        |     at Object.Module._extensions..js (internal/modules/cjs/loader.js:816:10)
 p2p_1        |     at Module.load (internal/modules/cjs/loader.js:672:32)
 ```
+
+* One of the initial tests in `01_init.spec.js` fails for no apparent reason, with a nondescriptive error such as a timeout, like the one included below:
+```
+ ● Init tests › should distribute ENG tokens
+
+    Timeout - Async callback was not invoked within the 5000ms timeout specified by jest.setTimeout.
+
+      57 |   });
+      58 | 
+    > 59 |   it('should distribute ENG tokens', async () => {
+         |   ^
+      60 |     const tokenContract = enigma.tokenContract;
+      61 |     let promises = [];
+      62 |     const allowance = utils.toGrains(1000);
+
+      at Spec (node_modules/jest-jasmine2/build/jasmine/Spec.js:85:20)
+      at Suite.it (test/integrationTests/01_init.spec.js:59:3)
+      at Object.describe (test/integrationTests/01_init.spec.js:22:1)
+```
+This is usually caused by the compiled contracts being out of sync between the containers. These three containers: `contract`, `client` and `p2p` share a volume on the docker network named `built_contracts` that persists between network runs. The solution is to enter one of these containers and wipe out the contents of that shared folder and restart the network again, for example:
+```
+$ docker-compose exec client /bin/bash
+root@client:~# cd enigma-contract/build/contracts/
+root@client:~/enigma-contract/build/contracts# rm -rf *
+```
