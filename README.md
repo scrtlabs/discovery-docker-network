@@ -113,6 +113,18 @@ where `{image_name}` is one of the following: `contract`, `p2p`, `client`, `core
 $ docker-compose build --no-cache {image_name}
 ```
 
+## Logging
+
+By default, Docker shows the output of all containers running on the network to the stdout of the process that launched the network, color coded by container.
+
+Additionally, the `./launch.bash` script takes an optional parameter `-l` that stores the output of each individual container in its own file inside the `logs/` folder. A subfolder is created each time the network is launched with the timestamp of the time of launch, for example: `logs/2019-05-15T00:19:36-05:00/`.
+
+For additional details on the Docker logging capabilities pertinent to this network configuration, refer to the [Logging](https://github.com/enigmampc/discovery-integration-tests/blob/develop/docs/logging.md) documentation.
+
+Additionally, `core` always logs to `~/.enigma/debug.log` inside the container (verbosity can be adjusted when `core` is launched [here](https://github.com/enigmampc/discovery-integration-tests/blob/fb03e5413efbf8ea7af58d2bed45d0fa567b5526/enigma-core/start_core.bash#L5) defaulting to displaying warnings and up).
+
+
+
 ## Mounting volumes for development
 
 By default, each of the container images are built pulling the latest version of their corresponding repositories, using the branches specified in `.env` (see Step 1 in "Running the tests" section above). There are instances in which you may want to use a local copy of that repository where you can introduce changes and test them on the network.
