@@ -70,16 +70,16 @@ services:
     networks:
       - net
 
-  principal:
+  km:
     build:
       context: enigma-core
-      dockerfile: Dockerfile.principal
+      dockerfile: Dockerfile.km
       args:
         - SGX_MODE=${SGX_MODE}
         - GIT_BRANCH_CORE=${GIT_BRANCH_CORE}
     stdin_open: true
     tty: true
-    hostname: enigma_principal
+    hostname: km
     networks:
       - net
     volumes:
