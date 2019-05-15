@@ -22,7 +22,4 @@ This document summarizes how to access the logs for any service or container in 
 
 Docker keeps all the above logs on disk, thus these can be both accessed while the network is running, and **after** it has stopped running.
 
-Docker will append logs between runs to the same file. So if you need to clean the logs to only see the output from the current run, before you launch the network, do the following (needs *root* privileges):
-```
-sudo truncate -s 0 $(docker inspect --format='{{.LogPath}}' CONTAINER)
-```
+The logs are cleared when you bring the network down completely with `./launch.bash -q`, and the containers are removed.
