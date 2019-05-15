@@ -108,7 +108,7 @@ And to rebuild only the image for one of the containers, use any of the labels t
 ```
 $ docker-compose build {image_name}
 ```
-where `{image_name}` is one of the following: `contract`, `p2p-proxy`, `p2p-worker`, `client`, `core`, `principal`, and which can be combined with the `--no-cache` option as follows:
+where `{image_name}` is one of the following: `contract`, `p2p`, `client`, `core`, `km`, and which can be combined with the `--no-cache` option as follows:
 ```
 $ docker-compose build --no-cache {image_name}
 ```
@@ -147,12 +147,11 @@ Use the following folders for each of these containers:
 
 | Container | Repo folder inside container |
 |-----------|------------------------------|
-| client   | /root/enigma-contract |
+| client    | /root/enigma-contract |
 | contract   | /root/enigma-contract |
-| p2p-proxy  | /root/enigma-p2p |
-| p2p-worker | /root/enigma-p2p |
+| p2p        | /root/enigma-p2p |
 | core       | /root/enigma-core |
-| principal  | /root/enigma-core |
+| km         | /root/enigma-core |
       
 ## Troubleshooting	
 

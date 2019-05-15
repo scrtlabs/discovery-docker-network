@@ -6,6 +6,6 @@ services:
     devices:
       - "/dev/isgx:/dev/isgx"
 
-  principal:
+  km:
     devices:
       - "/dev/isgx:/dev/isgx"

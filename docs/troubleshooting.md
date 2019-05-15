@@ -49,11 +49,11 @@ root@client:~# cd enigma-contract/build/contracts/
 root@client:~/enigma-contract/build/contracts# rm -rf *
 ```
 
-* When mounting the volume for either `core` or the `key management` node, you may see an error like the following in the network output:
+* When mounting the volume for either `core` or the `km` node, you may see an error like the following in the network output:
 ```
 core_1       | ./start_core.bash: line 6: ./target/debug/enigma-core-app: No such file or directory
 ```
-This means that you need to enter the container in question (either `core` or the `key management`) and trigger a build as follows, and then restart the network again:
+This means that you need to enter the container in question (either `core` or `km`) and trigger a build as follows, and then restart the network again:
 - `core`:
  ```
  $ docker-compose exec core /bin/bash
@@ -62,7 +62,7 @@ This means that you need to enter the container in question (either `core` or th
  ```
 - `key management` node:
  ```
- $ docker-compose exec principal /bin/bash
- root@principal:~# cd enigma-core/enigma-principal
- root@principal:~/enigma-core/enigma-principal# make full-clean && make DEBUG=1
+ $ docker-compose exec km /bin/bash
+ root@km:~# cd enigma-core/enigma-principal
+ root@km:~/enigma-core/enigma-principal# make full-clean && make DEBUG=1
  ```
