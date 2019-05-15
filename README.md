@@ -113,6 +113,12 @@ where `{image_name}` is one of the following: `contract`, `p2p`, `client`, `core
 $ docker-compose build --no-cache {image_name}
 ```
 
+## Logging
+
+By default, Docker shows the output of all containers running on the network to the stdout of the process that launched the network, color coded by container.
+
+Additionally, the `./launch.bash` script takes an optional parameter `-l` that stores the output of each individual container in its own file inside the `logs/` folder. A subfolder is created each time the network is launched with the timestamp of the time of launch, for example: `logs/2019-05-15T00:19:36-05:00/`
+
 ## Mounting volumes for development
 
 By default, each of the container images are built pulling the latest version of their corresponding repositories, using the branches specified in `.env` (see Step 1 in "Running the tests" section above). There are instances in which you may want to use a local copy of that repository where you can introduce changes and test them on the network.
