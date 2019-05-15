@@ -38,11 +38,13 @@ function help() {
 	echo "Launches a dockerized version of the Enigma Discovery network."
 	echo
 	echo "Usage:"
-	echo "	$0 [-h] [-q]"
+	echo "	$0 [-h] [-l] [-q]"
 	echo
 	echo "Options:"
 	echo "  -h    Show this help."
+	echo "  -l    Outputs logs to local folder logs/{TIMESTAMP}"
 	echo "  -q    Stops Enigma Docker Network and removes containers."
+
 }
 
 function check_config() {
@@ -61,12 +63,13 @@ if [ -f docker-compose.vol.yml ]; then
 	echo 'Mounting volumes from docker-compose.vol.yml'
 fi
 
-while getopts ":hqs" opt; do
+while getopts ":hlq" opt; do
 	case $opt in
 		h) help 
 		   exit 0;;
 		q) docker-compose down
 		   exit 0;;
+		l) LOGS=1
 	esac
 done
 
@@ -79,4 +82,23 @@ if [ "$SGX_MODE" = "HW" ]; then
 	ARGF="$ARGF -f docker-compose.hw.yml"
 fi
 
-NODES=$NODES docker-compose $ARGF up --scale core=$NODES --scale p2p=$NODES 
+if [[ $LOGS -eq 1 ]] ; then
+	NODES=$NODES docker-compose $ARGF up --scale core=$NODES --scale p2p=$NODES &
+	sleep 3
+	NOW=$(date -Iseconds)
+	LOGDIR=logs/$NOW
+	mkdir -p $LOGDIR
+	UNIQUESERVICES=(contract client km)
+	for i in ${UNIQUESERVICES[@]}; do
+		docker logs --follow --since $NOW ${COMPOSE_PROJECT_NAME}_${i}_1 > ${LOGDIR}/${COMPOSE_PROJECT_NAME}_${i}_1 &
+	done
+	MULTIPLESERVICES=(core p2p)
+	for i in ${MULTIPLESERVICES[@]}; do
+		for ((j=1; j<=$NODES; j++)); do
+			docker logs --follow --since $NOW ${COMPOSE_PROJECT_NAME}_${i}_${j} > ${LOGDIR}/${COMPOSE_PROJECT_NAME}_${i}_${j} &
+		done
+	done
+	wait
+else
+	NODES=$NODES docker-compose $ARGF up --scale core=$NODES --scale p2p=$NODES
+fi
