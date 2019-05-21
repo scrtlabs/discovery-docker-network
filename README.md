@@ -2,8 +2,8 @@
 
 | Service | Master | Develop |
 |---------|--------|---------|
-| Drone (SGX_MODE=HW) | [<img src="https://drone.enigma.co/api/badges/enigmampc/discovery-integration-tests/status.svg?branch=master"/>](https://drone.enigma.co/enigmampc/discovery-integration-tests) | [<img src="https://drone.enigma.co/api/badges/enigmampc/discovery-integration-tests/status.svg?branch=develop"/>](https://drone.enigma.co/enigmampc/discovery-integration-tests) | 
-| Travis (SGX_MODE=SW) | [![Build Status](https://travis-ci.com/enigmampc/discovery-integration-tests.svg?token=cNBBjbVVEGszuAJUokFT&branch=master)](https://travis-ci.com/enigmampc/discovery-integration-tests) | [![Build Status](https://travis-ci.com/enigmampc/discovery-integration-tests.svg?token=cNBBjbVVEGszuAJUokFT&branch=develop)](https://travis-ci.com/enigmampc/discovery-integration-tests) |
+| Drone (SGX_MODE=HW) | [<img src="https://drone.enigma.co/api/badges/enigmampc/discovery-docker-network/status.svg?branch=master"/>](https://drone.enigma.co/enigmampc/discovery-docker-network) | [<img src="https://drone.enigma.co/api/badges/enigmampc/discovery-docker-network/status.svg?branch=develop"/>](https://drone.enigma.co/enigmampc/discovery-docker-network) | 
+| Travis (SGX_MODE=SW) | [![Build Status](https://travis-ci.com/enigmampc/discovery-docker-network.svg?token=cNBBjbVVEGszuAJUokFT&branch=master)](https://travis-ci.com/enigmampc/discovery-docker-network) | [![Build Status](https://travis-ci.com/enigmampc/discovery-docker-network.svg?token=cNBBjbVVEGszuAJUokFT&branch=develop)](https://travis-ci.com/enigmampc/discovery-docker-network) |
 
 This repository provides a Docker network that runs the upcoming Discovery release of the Enigma protocol. It integrates the the following repositories that provide the various components that make up the network: [enigma-contract](https://github.com/enigmampc/enigma-contract), [enigma-core](https://github.com/enigmampc/enigma-core) and [enigma-p2p](https://github.com/enigmampc/enigma-p2p): 
 
