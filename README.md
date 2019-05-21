@@ -1,12 +1,11 @@
-# Discovery Integration Tests
+# Enigma Discovery Docker Network
 
 | Service | Master | Develop |
 |---------|--------|---------|
 | Drone (SGX_MODE=HW) | [<img src="https://drone.enigma.co/api/badges/enigmampc/discovery-integration-tests/status.svg?branch=master"/>](https://drone.enigma.co/enigmampc/discovery-integration-tests) | [<img src="https://drone.enigma.co/api/badges/enigmampc/discovery-integration-tests/status.svg?branch=develop"/>](https://drone.enigma.co/enigmampc/discovery-integration-tests) | 
 | Travis (SGX_MODE=SW) | [![Build Status](https://travis-ci.com/enigmampc/discovery-integration-tests.svg?token=cNBBjbVVEGszuAJUokFT&branch=master)](https://travis-ci.com/enigmampc/discovery-integration-tests) | [![Build Status](https://travis-ci.com/enigmampc/discovery-integration-tests.svg?token=cNBBjbVVEGszuAJUokFT&branch=develop)](https://travis-ci.com/enigmampc/discovery-integration-tests) |
 
-This repository includes a suite of Integration Tests across multiple repositories for the Discovery release of the Enigma Network.
-Currently integrates with the following repositories, and their corresponding branches (eventually becoming master):
+This repository provides a Docker network that runs the upcoming Discovery release of the Enigma protocol. It integrates the the following repositories that provide the various components that make up the network: [enigma-contract](https://github.com/enigmampc/enigma-contract), [enigma-core](https://github.com/enigmampc/enigma-core) and [enigma-p2p](https://github.com/enigmampc/enigma-p2p): 
 
 | Repo   | Branch | Build |
 |--------|--------|-------|
@@ -14,8 +13,7 @@ Currently integrates with the following repositories, and their corresponding br
 | [enigma-p2p](https://github.com/enigmampc/enigma-p2p/tree/jsonrpc-integration) | develop |[![Build Status](https://travis-ci.org/enigmampc/enigma-p2p.svg?branch=develop)](https://travis-ci.org/enigmampc/enigma-p2p) |
 | [enigma-core](https://github.com/enigmampc/enigma-core/tree/develop) | develop | <img src="https://drone.enigma.co/api/badges/enigmampc/enigma-core/status.svg?branch=develop"/> |
 
-
-Refer to [Issue #2](https://github.com/enigmampc/discovery-integration-tests/issues/2) for the status of the integration tests.
+This repository is configured for Continuous Integration (CI) on two different testing environments: Drone, where SGX runs in hardware mode, and Travis, where SGX runs in simulation mode. The tests include a comprehensive suite of integration tests across the network that cover all [these scenarios](https://github.com/enigmampc/discovery-integration-tests/issues/2). 
 
 
 ## Running the tests
