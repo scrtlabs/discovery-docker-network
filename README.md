@@ -88,12 +88,16 @@ From within the `discovery-docker-network` directory you have just cloned:
     - "/local/path/enigma-contract:/root/enigma-contract"
     ```
 
+    where you must replace the `/local/path/enigma-contract` fragment with the absolute path to where you have cloned the `enigma-contract` repository in step 1 above in your local machine.
+
     For the `core` container, add a volumes section and the core repository mapping:
 
     ```
     volumes:
       - "/local/path/enigma-core:/root/enigma-core"
     ```
+    
+    where again you must replace the `/local/path/enigma-core` fragment with the absolute path to where you have cloned the `enigma-core` repository in step 1 above in your local machine.
 
 4. Still within `discovery-docker-network` repo, run `./launch.bash` to launch the Docker network. The first time you launch it, it will have to build the Docker images for each container, which depending on the capabilities of your computer, can take up an hour or more (*Note: the build of `core` and `km` may throw an error that is accounted for, and the build will handle it as needed.*)
 
