@@ -71,55 +71,74 @@ To set up a developer environment, you will need to run the Docker network provi
 1. Clone the [enigma-contract](https://github.com/enigmampc/enigma-contract), [enigma-core](https://github.com/enigmampc/enigma-core) and [discovery-docker-network](https://github.com/enigmampc/discovery-docker-network) repositories mentioned above onto your local machine with the following commands:
 
   ```
-  git clone git@github.com:enigmampc/enigma-contract.git
-  git clone git@github.com:enigmampc/enigma-core.git
-  git clone git@github.com:enigmampc/enigma-docker-network.git`
+  git clone https://github.com/enigmampc/enigma-contract.git
+  git clone https://github.com/enigmampc/enigma-core.git
+  git clone https://github.com/enigmampc/enigma-docker-network.git
   ```
 
-From within `discovery-docker-network` directory you have just cloned:
+From within the `discovery-docker-network` directory you have just cloned:
 
-2. Create a `.env` file based off of the `.env-template` file and adjust `SGX_MODE` to equal `SW` (software/simulation) or `HW `(hardware-compatible device) accordingly.
+2. Create a `.env` file based off of the `.env-template` file and adjust `SGX_MODE` to equal `SW` (software/simulation) or `HW `(hardware-compatible device) accordingly. Refer to the [Requirements](#requirements) section above for additional information.
 
-3. Refer to the “Mounting volumes for development [link]”  and edit the [docker-compose.yml](https://github.com/enigmampc/discovery-docker-network/blob/develop/docker-compose.yml) file to volume map your local repositories on the relevant containers (`client` and `core`). You can accomplish this by adding a line item to the `volumes` section in the container’s stanza in the following format: `local_folder:folder_in_container`. More specifically: 
-  For the `client` container, add the following line to the volumes section:
+3. Refer to the [Mounting volumes for development](#mounting-volumes-for-development) and edit the [docker-compose.yml](https://github.com/enigmampc/discovery-docker-network/blob/develop/docker-compose.yml) file to volume map your local repositories on the relevant containers (`client` and `core`). You can accomplish this by adding a line item to the `volumes` section in the container’s stanza in the following format: `local_folder:folder_in_container`. More specifically:
 
-  ```
-  - "/local/path/enigma-contract:/root/enigma-contract"
-  ```
+    For the `client` container, add the following line to the volumes section:
 
-  For the `core` container, add a volumes section and the core repository mapping:
-  ```
-  volumes:
+    ```
+    - "/local/path/enigma-contract:/root/enigma-contract"
+    ```
+
+    For the `core` container, add a volumes section and the core repository mapping:
+
+    ```
+    volumes:
       - "/local/path/enigma-core:/root/enigma-core"
-  ```
+    ```
 
-4. Still within `discovery-docker-network` repo, run `./launch.bash` to launch the Docker network. The first time you launch it, it will have to build the Docker images for each container, which depending on the capabilities of your computer, can take up an hour or more.
+4. Still within `discovery-docker-network` repo, run `./launch.bash` to launch the Docker network. The first time you launch it, it will have to build the Docker images for each container, which depending on the capabilities of your computer, can take up an hour or more (*Note: the build of `core` and `km` may throw an error that is accounted for, and the build will handle it as needed.*)
 
 5. Within the `core` repo folder, create a new `lib` Rust project under `examples/eng_wasm_contracts` on the command line with:
 
-  ```
-  cd examples/eng_wasm_contracts
-  cargo new <project_name> --lib
-  ```
+    ```
+    cd examples/eng_wasm_contracts
+    cargo new <project_name> --lib
+    ```
 
 6. Write your secret contract. Refer to the [example secret contracts](https://github.com/enigmampc/enigma-core/tree/develop/examples/eng_wasm_contracts): within each folder, refer to `src/lib.rs` for the actual secret contract code), whereas the rest is scaffolding. A great starting point would be the `simple_calculator` that provides basic arithmetic operations (add, sub, mul, div) for any two inputs.
 
 7. Enter the `core` container:
 
-  ```
-  docker-compose exec core /bin/bash
-  ```
-  And build/compile your secret contract with the following commands: 
+    ```
+    docker-compose exec core /bin/bash
+    ```
+    And build/compile your secret contract with the following commands: 
 
-  ```
-  cd enigma-core/examples/eng_wasm_contracts/<project_name>
-  cargo build --release --target wasm32-unknown-unknown
-  ```
+    ```
+    cd enigma-core/examples/eng_wasm_contracts/<project_name>
+    cargo build --release --target wasm32-unknown-unknown
+    ```
 
-8. The `cargo build` command above will compile your secret contract to the following path inside the container: `~/enigma-core/examples/eng_wasm_contracts/<project_name>/target/wasm32-unknown-unknown/release/contract.wasm`. Because this volume is mounted on your local filesystem, it will also be available at `/local/path/enigma-core/examples/eng_wasm_contracts/<project_name>/target/wasm32-unknown-unknown/release/contract.wasm`.
-It’s compiled with the name `contract.wasm` as per the package name declaration in your project’s `Cargo.toml` file. Copy this compiled file to the scope of your local `enigma-contract` repository in: `/local/path/enigma-contract/enigma-js/test/integrationTests/secretContracts/` and rename the file with a name specific to your application instead of the generic `contract.wasm` (refer to the other files in that folder for guidance).
+8. The `cargo build` command above will compile your secret contract to the following path inside the container:
 
-9. Create template deploy and compute files like those already found in integration test folder, and run unit tests as specified here: https://github.com/enigmampc/discovery-integration-tests (edited) 
+    ```
+    ~/enigma-core/examples/eng_wasm_contracts/<project_name>/target/wasm32-unknown-unknown/release/contract.wasm
+    ```
+
+    Because this volume is mounted on your local filesystem, it will also be available at:
+
+    ```
+    /local/path/enigma-core/examples/eng_wasm_contracts/<project_name>/target/wasm32-unknown-unknown/release/contract.wasm
+    ```
+
+    It’s compiled with the name `contract.wasm` as per the package name declaration in your project `Cargo.toml` file. Copy this compiled file to the scope of your local `enigma-contract` repository in:
+
+    ```
+    /local/path/enigma-contract/enigma-js/test/integrationTests/secretContracts/
+    ```
+
+    and rename the file with a name specific to your application instead of the generic `contract.wasm` (refer to the other files in that folder for guidance).
+
+9. Create template deploy and compute files like those already found in the [integration test folder](https://github.com/enigmampc/enigma-contract/tree/master/enigma-js/test/integrationTests) of the `enigma-contract` repository, and run the corresponding [integration tests]((https://github.com/enigmampc/discovery-integration-tests/blob/develop/docs/integration.md). For example, refer to [template.02_deploy_calculator.js](https://github.com/enigmampc/enigma-contract/blob/master/enigma-js/test/integrationTests/template.02_deploy_calculator.js) and [template.10_execute_calculator.js](https://github.com/enigmampc/enigma-contract/blob/master/enigma-js/test/integrationTests/template.10_execute_calculator.js).
 
 ### Simulation mode
 
@@ -127,9 +146,9 @@ The docker network can run both in SGX Hardware and Software (Simulation) modes.
 
 1. Edit `.env` and change `SGX_MODE=SW`, and then re-build the `core` and `km` images:
 
-  ```
-  docker-compose build --no-cache core km
-  ```
+    ```
+    docker-compose build --no-cache core km
+    ```
 
 2. Launch the network with `./launch.bash` as usual.
 
@@ -147,20 +166,25 @@ These resources are geared towards the advanced user who needs additional custom
 The first time that you launch the network, and the images for each container are not yet available, Docker will build them automatically. 
 
 If you want to manually rebuild them at a later time, you can do so using the following command, which will only pick up local changes, but will not pick up new commits on any of the remote repos it fetches:
+
 ```
 $ docker-compose build
 ```
 
 To force a rebuild without using any of the cached previous images (to pick a more recent commit from a remote repo, for example), run:
+
 ```
 $ docker-compose build --no-cache
 ```
 
 And to rebuild only the image for one of the containers, use any of the labels that you will find in the `docker-compose.yml`:
+
 ```
 $ docker-compose build {image_name}
 ```
+
 where `{image_name}` is one of the following: `contract`, `p2p`, `client`, `core`, `km`, and which can be combined with the `--no-cache` option as follows:
+
 ```
 $ docker-compose build --no-cache {image_name}
 ```
@@ -179,7 +203,7 @@ In order to do that you do the following:
 
 2. Edit the `docker-compose.yml` file and add a line in the `volumes` section (you may need to create that section if it's not present in the config for that container) to the container you are interested in, mapping the local folder to where you have cloned the repo to the corresponding folder inside that container (`local_folder:folder_in_container`). Again using the contract as an example, the relevant section would become:
 
-     ```
+    ```
     client:
       build:
         context: enigma-contract
@@ -193,7 +217,7 @@ In order to do that you do the following:
       volumes:
         - "built_contracts:/root/enigma-contract/build/contracts"
         - "/path_to/enigma-contract:/root/enigma-contract"
-      ```
+    ```
       
 Use the following folders for each of these containers:
 
