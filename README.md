@@ -118,17 +118,40 @@ From within the `discovery-docker-network` directory you have just cloned:
 
 7. Write your secret contract. Refer to the [example secret contracts](https://github.com/enigmampc/enigma-core/tree/develop/examples/eng_wasm_contracts): within each folder, refer to `src/lib.rs` for the actual secret contract code), whereas the rest is scaffolding. A great starting point would be the `simple_calculator` that provides basic arithmetic operations (add, sub, mul, div) for any two inputs.
 
-8. Enter the `core` container:
+8. Within the `discovery-docker-network` folder, enter the `core` container by running the following command:
 
     ```
     docker-compose exec core /bin/bash
     ```
-    And build/compile your secret contract with the following commands: 
 
-    ```
-    cd enigma-core/examples/eng_wasm_contracts/<project_name>
-    cargo build --release --target wasm32-unknown-unknown
-    ```
+    which provides a Bash shell (`/bin/bash`) inside the `core` container. Once inside the container (you will see a different prompt), you need to do two things:
+    
+    - the first time, you need to build the `core` binaries inside the container, which varies depending on whether you are running in Hardware mode or in Simulation mode:
+
+        _Hardware Mode_
+
+        ```
+        root@core:~# cd enigma-core/enigma-core
+        root@core:~/enigma-core/enigma-core# make full-clean
+        root@core:~/enigma-core/enigma-core# make DEBUG=1
+        ```
+
+        _Simulation Mode_
+
+        ```
+        root@core:~# cd enigma-core/enigma-core
+        root@core:~/enigma-core/enigma-core# make full-clean
+        root@core:~/enigma-core/enigma-core# SGX_MODE=SW make DEBUG=1
+        ```
+
+    - then, you can build/compile your secret contract with the following commands: 
+
+        ```
+        root@core:~/enigma-core/enigma-core# cd ~/enigma-core/examples/eng_wasm_contracts/<project_name>
+        root@core:~/enigma-core/examples/eng_wasm_contracts/<project_name># cargo build --release --target wasm32-unknown-unknown
+        ```
+
+    - you can exit the container with `Ctrl` + `c`, and you will return to the prompt of your local computer.
 
 9. The `cargo build` command above will compile your secret contract to the following path inside the container:
 
