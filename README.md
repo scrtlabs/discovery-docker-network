@@ -99,18 +99,26 @@ From within the `discovery-docker-network` directory you have just cloned:
     
     where again you must replace the `/local/path/enigma-core` fragment with the absolute path to where you have cloned the `enigma-core` repository in step 1 above in your local machine.
 
-4. Still within `discovery-docker-network` repo, run `./launch.bash` to launch the Docker network. The first time you launch it, it will have to build the Docker images for each container, which depending on the capabilities of your computer, can take up an hour or more (*Note: the build of `core` and `km` may throw an error that is accounted for, and the build will handle it as needed.*)
+4. Still within `discovery-docker-network` repo, run:
 
-5. Within the `core` repo folder, create a new `lib` Rust project under `examples/eng_wasm_contracts` on the command line with:
+    ```
+    docker-compose build
+    ```
+
+    to build all the Docker images needed for the network. You only need to do this step before the first time you launch the network. Depending on the capabilities of your computer, it can take up an hour or more (*Note: the build of `core` and `km` may throw an error that is accounted for, and the build will handle it as needed.*). Refer to the [Building the Docker images](#building-the-docker-images) section, if you need to rebuild the Docker images in the future.
+
+5. Within the `discovery-docker-network`, run `./launch.bash` to launch the Docker network. 
+
+6. Within the `core` repo folder, create a new `lib` Rust project under `examples/eng_wasm_contracts` on the command line with:
 
     ```
     cd examples/eng_wasm_contracts
     cargo new <project_name> --lib
     ```
 
-6. Write your secret contract. Refer to the [example secret contracts](https://github.com/enigmampc/enigma-core/tree/develop/examples/eng_wasm_contracts): within each folder, refer to `src/lib.rs` for the actual secret contract code), whereas the rest is scaffolding. A great starting point would be the `simple_calculator` that provides basic arithmetic operations (add, sub, mul, div) for any two inputs.
+7. Write your secret contract. Refer to the [example secret contracts](https://github.com/enigmampc/enigma-core/tree/develop/examples/eng_wasm_contracts): within each folder, refer to `src/lib.rs` for the actual secret contract code), whereas the rest is scaffolding. A great starting point would be the `simple_calculator` that provides basic arithmetic operations (add, sub, mul, div) for any two inputs.
 
-7. Enter the `core` container:
+8. Enter the `core` container:
 
     ```
     docker-compose exec core /bin/bash
@@ -122,7 +130,7 @@ From within the `discovery-docker-network` directory you have just cloned:
     cargo build --release --target wasm32-unknown-unknown
     ```
 
-8. The `cargo build` command above will compile your secret contract to the following path inside the container:
+9. The `cargo build` command above will compile your secret contract to the following path inside the container:
 
     ```
     ~/enigma-core/examples/eng_wasm_contracts/<project_name>/target/wasm32-unknown-unknown/release/contract.wasm
@@ -142,7 +150,7 @@ From within the `discovery-docker-network` directory you have just cloned:
 
     and rename the file with a name specific to your application instead of the generic `contract.wasm` (refer to the other files in that folder for guidance).
 
-9. Create template deploy and compute files like those already found in the [integration test folder](https://github.com/enigmampc/enigma-contract/tree/master/enigma-js/test/integrationTests) of the `enigma-contract` repository, and run the corresponding [integration tests]((https://github.com/enigmampc/discovery-integration-tests/blob/develop/docs/integration.md). For example, refer to [template.02_deploy_calculator.js](https://github.com/enigmampc/enigma-contract/blob/master/enigma-js/test/integrationTests/template.02_deploy_calculator.js) and [template.10_execute_calculator.js](https://github.com/enigmampc/enigma-contract/blob/master/enigma-js/test/integrationTests/template.10_execute_calculator.js).
+10. Create template deploy and compute files like those already found in the [integration test folder](https://github.com/enigmampc/enigma-contract/tree/master/enigma-js/test/integrationTests) of the `enigma-contract` repository, and run the corresponding [integration tests]((https://github.com/enigmampc/discovery-integration-tests/blob/develop/docs/integration.md). For example, refer to [template.02_deploy_calculator.js](https://github.com/enigmampc/enigma-contract/blob/master/enigma-js/test/integrationTests/template.02_deploy_calculator.js) and [template.10_execute_calculator.js](https://github.com/enigmampc/enigma-contract/blob/master/enigma-js/test/integrationTests/template.10_execute_calculator.js).
 
 ### Simulation mode
 
