@@ -70,11 +70,11 @@ To set up a developer environment, you will need to run the Docker network provi
 
 1. Clone the [enigma-contract](https://github.com/enigmampc/enigma-contract), [enigma-core](https://github.com/enigmampc/enigma-core) and [discovery-docker-network](https://github.com/enigmampc/discovery-docker-network) repositories mentioned above onto your local machine with the following commands:
 
-  ```
-  git clone https://github.com/enigmampc/enigma-contract.git
-  git clone https://github.com/enigmampc/enigma-core.git
-  git clone https://github.com/enigmampc/enigma-docker-network.git
-  ```
+    ```
+    git clone https://github.com/enigmampc/enigma-contract.git
+    git clone https://github.com/enigmampc/enigma-core.git
+    git clone https://github.com/enigmampc/enigma-docker-network.git
+    ```
 
 From within the `discovery-docker-network` directory you have just cloned:
 
