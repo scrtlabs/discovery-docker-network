@@ -19,7 +19,7 @@ You can run all and any of the integration tests documented [here](https://githu
 3. ... and then, run the integration tests:
 
     ```
-    $ docker-compose run client ./start_test.bash
+    $ docker-compose exec client ./start_test.bash
     ```
 
 ## Running individual tests
@@ -29,7 +29,7 @@ After following steps 1 and 2 above, do the following:
 3. Enter the "client" container:
 
 	```
-	$ docker-compose run client /bin/bash
+	$ docker-compose exec client /bin/bash
 	```
 
 4. Change folders, and create an empty file:
