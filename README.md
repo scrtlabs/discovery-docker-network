@@ -58,7 +58,7 @@ If you want to run SGX in Hardware mode, in the same way it will be run in produ
     script to check if SGX is enabled on your system.
 
 - A host machine with [Linux SGX driver](https://github.com/intel/linux-sgx-driver) 
-  installed. Upon successful installation of the driver ``/dev/isgx`` should be
+  installed (version 2.x recommended). Upon successful installation of the driver ``/dev/isgx`` should be
   present in the system.
 
 However, for development purposes, the Enigma Discovery Docker Network can be run in Simulation (or Software mode), where no specialized hardware is required.
