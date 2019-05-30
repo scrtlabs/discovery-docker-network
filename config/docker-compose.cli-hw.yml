@@ -1,0 +1,83 @@
+version: '3'
+
+services:
+
+  contract:
+    build:
+      image: enigmampc/enigma_contract
+    stdin_open: true
+    tty: true
+    networks:
+      - net
+    hostname: contract
+    entrypoint:
+      - /bin/bash
+      - -c
+      - ./launch_ganache.bash; bash
+    environment:
+      - SGX_MODE=${SGX_MODE}
+    volumes:
+      - "built_contracts:/root/enigma-contract/build/contracts"
+      - "shared:/root/.enigma"
+
+  p2p:
+    build: 
+      image: enigmampc/enigma_p2p
+    stdin_open: true
+    tty: true
+    networks:
+      - net
+    hostname: p2p
+    entrypoint:
+      - /bin/bash
+      - -c
+      - ./start_worker.bash; bash
+    environment:
+      - NETWORK=${COMPOSE_PROJECT_NAME}
+    volumes:
+        - "built_contracts:/root/enigma-p2p/test/ethereum/scripts/build/contracts"
+
+  client:
+    build:
+      image: enigmampc/enigma_contract
+    stdin_open: true
+    tty: true
+    networks:
+      - net
+    hostname: client
+    environment:
+      - NETWORK=${COMPOSE_PROJECT_NAME}
+      - NODES
+    volumes:
+      - "built_contracts:/root/enigma-contract/build/contracts"
+
+  core:
+    build:
+      image: enigmampc/enigma_core_hw
+    stdin_open: true
+    tty: true
+    hostname: core
+    networks:
+      - net
+    devices:
+      - "/dev/isgx:/dev/isgx"
+
+  km:
+    build:
+      image: enigmampc/enigma_km_hw
+    stdin_open: true
+    tty: true
+    hostname: km
+    networks:
+      - net
+    volumes:
+      - "shared:/root/.enigma"
+    devices:
+      - "/dev/isgx:/dev/isgx"
+
+networks:
+    net:
+
+volumes:
+  built_contracts:
+  shared:
