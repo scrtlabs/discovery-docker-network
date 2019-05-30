@@ -172,22 +172,20 @@ From within the `discovery-docker-network` directory you have just cloned:
 9. The `cargo build` command above will compile your secret contract to the following path inside the container:
 
     ```
-    ~/enigma-core/examples/eng_wasm_contracts/<project_name>/target/wasm32-unknown-unknown/release/contract.wasm
+    ~/enigma-core/examples/eng_wasm_contracts/<project_name>/target/wasm32-unknown-unknown/release/<project_name>.wasm
     ```
 
     Because this volume is mounted on your local filesystem, it will also be available at:
 
     ```
-    /local/path/enigma-core/examples/eng_wasm_contracts/<project_name>/target/wasm32-unknown-unknown/release/contract.wasm
+    /local/path/enigma-core/examples/eng_wasm_contracts/<project_name>/target/wasm32-unknown-unknown/release/<project_name>.wasm
     ```
 
-    It’s compiled with the name `contract.wasm` as per the package name declaration in your project `Cargo.toml` file. Copy this compiled file to the scope of your local `enigma-contract` repository in:
+    Copy this compiled file to the scope of your local `enigma-contract` repository in:
 
     ```
     /local/path/enigma-contract/enigma-js/test/integrationTests/secretContracts/
     ```
-
-    and rename the file with a name specific to your application instead of the generic `contract.wasm` (refer to the other files in that folder for guidance).
 
 10. Create template deploy and compute files like those already found in the [integration test folder](https://github.com/enigmampc/enigma-contract/tree/master/enigma-js/test/integrationTests) of the `enigma-contract` repository, and run the corresponding [integration tests](https://github.com/enigmampc/discovery-integration-tests/blob/develop/docs/integration.md). For example, refer to [template.02_deploy_calculator.js](https://github.com/enigmampc/enigma-contract/blob/master/enigma-js/test/integrationTests/template.02_deploy_calculator.js) and [template.10_execute_calculator.js](https://github.com/enigmampc/enigma-contract/blob/master/enigma-js/test/integrationTests/template.10_execute_calculator.js).
 
