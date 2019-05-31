@@ -3,8 +3,7 @@ version: '3'
 services:
 
   contract:
-    build:
-      image: enigmampc/enigma_contract
+    image: enigmampc/enigma_contract
     stdin_open: true
     tty: true
     networks:
@@ -21,8 +20,7 @@ services:
       - "shared:/root/.enigma"
 
   p2p:
-    build: 
-      image: enigmampc/enigma_p2p
+    image: enigmampc/enigma_p2p
     stdin_open: true
     tty: true
     networks:
@@ -38,8 +36,7 @@ services:
         - "built_contracts:/root/enigma-p2p/test/ethereum/scripts/build/contracts"
 
   client:
-    build:
-      image: enigmampc/enigma_contract
+    image: enigmampc/enigma_contract
     stdin_open: true
     tty: true
     networks:
@@ -52,8 +49,7 @@ services:
       - "built_contracts:/root/enigma-contract/build/contracts"
 
   core:
-    build:
-      image: enigmampc/enigma_core_hw
+    image: enigmampc/enigma_core_hw
     stdin_open: true
     tty: true
     hostname: core
@@ -63,8 +59,7 @@ services:
       - "/dev/isgx:/dev/isgx"
 
   km:
-    build:
-      image: enigmampc/enigma_km_hw
+    image: enigmampc/enigma_km_hw
     stdin_open: true
     tty: true
     hostname: km
