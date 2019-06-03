@@ -16,10 +16,13 @@ RUN npm install
 RUN cd enigma-js && yarn install
 
 WORKDIR /root
-COPY start_test.bash .
-COPY launch_ganache.bash .
 COPY simpleHTTP1.bash .
 COPY simpleHTTP2.bash .
+COPY init.bash .
+COPY start_test.bash .
+COPY login_workers.bash .
+COPY launch_ganache.bash .
+
 RUN mkdir -p /root/.enigma
 
 ENTRYPOINT ["/usr/bin/env"]
