@@ -14,7 +14,7 @@ services:
       - -c
       - ./launch_ganache.bash; bash
     environment:
-      - SGX_MODE=${SGX_MODE}
+      - SGX_MODE
     volumes:
       - "${BUILD_CONTRACTS_PATH}:/root/enigma-contract/build/contracts"
       - "shared:/root/.enigma"
@@ -53,6 +53,7 @@ services:
     environment:
       - NETWORK=${COMPOSE_PROJECT_NAME}
       - NODES
+      - SGX_MODE
     volumes:
       - "${BUILD_CONTRACTS_PATH}:/root/enigma-contract/build/contracts"
 
