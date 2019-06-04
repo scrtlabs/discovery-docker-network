@@ -16,8 +16,10 @@ services:
     environment:
       - SGX_MODE=${SGX_MODE}
     volumes:
-      - "built_contracts:/root/enigma-contract/build/contracts"
+      - "${BUILD_CONTRACTS_PATH}:/root/enigma-contract/build/contracts"
       - "shared:/root/.enigma"
+    ports:
+      - "9545:9545"
 
   p2p:
     image: enigmampc/enigma_p2p
@@ -33,7 +35,9 @@ services:
     environment:
       - NETWORK=${COMPOSE_PROJECT_NAME}
     volumes:
-        - "built_contracts:/root/enigma-p2p/test/ethereum/scripts/build/contracts"
+        - "${BUILD_CONTRACTS_PATH}:/root/enigma-p2p/test/ethereum/scripts/build/contracts"
+    ports:
+      - "3346:3346"
 
   client:
     image: enigmampc/enigma_contract
@@ -42,11 +46,15 @@ services:
     networks:
       - net
     hostname: client
+    entrypoint:
+      - /bin/bash
+      - -c
+      - ./login_workers.bash; bash
     environment:
       - NETWORK=${COMPOSE_PROJECT_NAME}
       - NODES
     volumes:
-      - "built_contracts:/root/enigma-contract/build/contracts"
+      - "${BUILD_CONTRACTS_PATH}:/root/enigma-contract/build/contracts"
 
   core:
     image: enigmampc/enigma_core_sw
@@ -70,5 +78,4 @@ networks:
     net:
 
 volumes:
-  built_contracts:
   shared:
