@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  client:
+    entrypoint:
+      - /bin/bash
+      - -c
+      - ./start_test.bash
+    

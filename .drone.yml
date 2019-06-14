@@ -13,24 +13,15 @@ steps:
       - name: dockersock
         path: /var/run/docker.sock
 
-  - name: deploy
+  - name: test
     image: docker/compose:1.23.2
     commands:
-      - docker-compose -f docker-compose.yml -f docker-compose.hw.yml --exit-code-from client up
+      - docker-compose -f docker-compose.yml -f docker-compose.hw.yml -f docker-compose.test.yml up --exit-code-from client
     volumes:
       - name: dockersock
         path: /var/run/docker.sock
       - name: isgx
         path: /dev/isgx
-    detach: true
-
-  - name: test
-    image: docker/compose:1.23.2
-    commands:
-      - docker-compose run client ./start_test.bash
-    volumes:
-      - name: dockersock
-        path: /var/run/docker.sock
 
   - name: cleanup
     image: docker/compose:1.23.2
