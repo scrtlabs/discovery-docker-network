@@ -6,39 +6,34 @@ steps:
     commands:
       - cp .env-template .env
       - sed -i "s/COMPOSE_PROJECT_NAME=.*/COMPOSE_PROJECT_NAME=enigma_${DRONE_BUILD_NUMBER}/" .env
-      - docker network prune -f || true
       - docker-compose down --rmi all -v || true
       - docker-compose build --no-cache
     volumes:
       - name: dockersock
         path: /var/run/docker.sock
 
-  - name: deploy
+  - name: test
     image: docker/compose:1.23.2
     commands:
-      - docker-compose -f docker-compose.yml -f docker-compose.hw.yml up
+      - docker-compose -f docker-compose.yml -f docker-compose.hw.yml -f docker-compose.test.yml up --exit-code-from client
     volumes:
       - name: dockersock
         path: /var/run/docker.sock
       - name: isgx
         path: /dev/isgx
-    detach: true
-
-  - name: test
-    image: docker/compose:1.23.2
-    commands:
-      - docker-compose run client ./start_test.bash
-    volumes:
-      - name: dockersock
-        path: /var/run/docker.sock
 
   - name: cleanup
     image: docker/compose:1.23.2
     commands:
       - docker-compose down
+      - docker images | grep enigma_${DRONE_BUILD_NUMBER} | awk '{print $1}' | xargs -I {} docker image rmi {}
     volumes:
       - name: dockersock
         path: /var/run/docker.sock
+    when:
+      status:
+        - success
+        - failure
 
 volumes:
   - name: isgx

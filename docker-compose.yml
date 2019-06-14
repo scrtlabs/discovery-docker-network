@@ -3,11 +3,7 @@ version: '3'
 services:
 
   contract:
-    build:
-      context: enigma-contract
-      args:
-        - SGX_MODE=${SGX_MODE}
-        - GIT_BRANCH_CONTRACT=${GIT_BRANCH_CONTRACT}
+    image: enigmampc/enigma_contract
     stdin_open: true
     tty: true
     networks:
@@ -24,10 +20,7 @@ services:
       - "shared:/root/.enigma"
 
   p2p:
-    build: 
-      context: enigma-p2p
-      args:
-        - GIT_BRANCH_P2P=${GIT_BRANCH_P2P}
+    image: enigmampc/enigma_p2p
     stdin_open: true
     tty: true
     networks:
@@ -43,10 +36,7 @@ services:
         - "built_contracts:/root/enigma-p2p/test/ethereum/scripts/build/contracts"
 
   client:
-    build:
-      context: enigma-contract
-      args:
-        - GIT_BRANCH_CONTRACT=${GIT_BRANCH_CONTRACT}
+    image: enigmampc/enigma_contract
     stdin_open: true
     tty: true
     networks:
@@ -60,11 +50,7 @@ services:
       - "built_contracts:/root/enigma-contract/build/contracts"
 
   core:
-    build:
-      context: enigma-core
-      args:
-        - SGX_MODE=${SGX_MODE}
-        - GIT_BRANCH_CORE=${GIT_BRANCH_CORE}
+    image: enigmampc/enigma_core_sw
     stdin_open: true
     tty: true
     hostname: core
@@ -72,12 +58,7 @@ services:
       - net
 
   km:
-    build:
-      context: enigma-core
-      dockerfile: Dockerfile.km
-      args:
-        - SGX_MODE=${SGX_MODE}
-        - GIT_BRANCH_CORE=${GIT_BRANCH_CORE}
+    image: enigmampc/enigma_km_sw
     stdin_open: true
     tty: true
     hostname: km
