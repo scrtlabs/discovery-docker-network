@@ -58,7 +58,7 @@ services:
       - net
 
   km:
-    image: enigmampc/enigma_km_hw
+    image: enigmampc/enigma_km_sw
     stdin_open: true
     tty: true
     hostname: km
