@@ -3,11 +3,7 @@ version: '3'
 services:
 
   contract:
-    build:
-      context: enigma-contract
-      args:
-        - SGX_MODE=${SGX_MODE}
-        - GIT_BRANCH_CONTRACT=${GIT_BRANCH_CONTRACT}
+    image: enigmampc/enigma_contract
     stdin_open: true
     tty: true
     networks:
@@ -18,16 +14,15 @@ services:
       - -c
       - ./launch_ganache.bash; bash
     environment:
-      - SGX_MODE=${SGX_MODE}
+      - SGX_MODE
     volumes:
-      - "built_contracts:/root/enigma-contract/build/contracts"
+      - "${BUILD_CONTRACTS_PATH}:/root/enigma-contract/build/contracts"
       - "shared:/root/.enigma"
+    ports:
+      - "9545:9545"
 
   p2p:
-    build: 
-      context: enigma-p2p
-      args:
-        - GIT_BRANCH_P2P=${GIT_BRANCH_P2P}
+    image: enigmampc/enigma_p2p
     stdin_open: true
     tty: true
     networks:
@@ -40,44 +35,40 @@ services:
     environment:
       - NETWORK=${COMPOSE_PROJECT_NAME}
     volumes:
-        - "built_contracts:/root/enigma-p2p/test/ethereum/scripts/build/contracts"
+        - "${BUILD_CONTRACTS_PATH}:/root/enigma-p2p/test/ethereum/scripts/build/contracts"
+    ports:
+      - "3346:3346"
 
   client:
-    build:
-      context: enigma-contract
-      args:
-        - GIT_BRANCH_CONTRACT=${GIT_BRANCH_CONTRACT}
+    image: enigmampc/enigma_contract
     stdin_open: true
     tty: true
     networks:
       - net
     hostname: client
+    entrypoint:
+      - /bin/bash
+      - -c
+      - ./login_workers.bash; bash
     environment:
       - NETWORK=${COMPOSE_PROJECT_NAME}
       - NODES
       - SGX_MODE
     volumes:
-      - "built_contracts:/root/enigma-contract/build/contracts"
+      - "${BUILD_CONTRACTS_PATH}:/root/enigma-contract/build/contracts"
 
   core:
-    build:
-      context: enigma-core
-      args:
-        - SGX_MODE=${SGX_MODE}
-        - GIT_BRANCH_CORE=${GIT_BRANCH_CORE}
+    image: enigmampc/enigma_core_hw
     stdin_open: true
     tty: true
     hostname: core
     networks:
       - net
+    devices:
+      - "/dev/isgx:/dev/isgx"
 
   km:
-    build:
-      context: enigma-core
-      dockerfile: Dockerfile.km
-      args:
-        - SGX_MODE=${SGX_MODE}
-        - GIT_BRANCH_CORE=${GIT_BRANCH_CORE}
+    image: enigmampc/enigma_km_hw
     stdin_open: true
     tty: true
     hostname: km
@@ -85,10 +76,11 @@ services:
       - net
     volumes:
       - "shared:/root/.enigma"
+    devices:
+      - "/dev/isgx:/dev/isgx"
 
 networks:
     net:
 
 volumes:
-  built_contracts:
   shared:
