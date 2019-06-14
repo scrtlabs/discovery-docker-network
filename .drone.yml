@@ -36,9 +36,14 @@ steps:
     image: docker/compose:1.23.2
     commands:
       - docker-compose down
+      - docker images | grep enigma_${DRONE_BUILD_NUMBER} | awk '{print $1}' | xargs -I {} docker image rmi {}
     volumes:
       - name: dockersock
         path: /var/run/docker.sock
+    when:
+      status:
+        - success
+        - failure
 
 volumes:
   - name: isgx
