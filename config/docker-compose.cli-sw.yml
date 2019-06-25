@@ -3,7 +3,7 @@ version: '3'
 services:
 
   contract:
-    image: enigmampc/enigma_contract
+    image: enigmampc/enigma_contract:${DOCKER_TAG}
     stdin_open: true
     tty: true
     networks:
@@ -22,7 +22,7 @@ services:
       - "9545:9545"
 
   p2p:
-    image: enigmampc/enigma_p2p
+    image: enigmampc/enigma_p2p:${DOCKER_TAG}
     stdin_open: true
     tty: true
     networks:
@@ -40,7 +40,7 @@ services:
       - "3346:3346"
 
   client:
-    image: enigmampc/enigma_contract
+    image: enigmampc/enigma_contract:${DOCKER_TAG}
     stdin_open: true
     tty: true
     networks:
@@ -58,7 +58,7 @@ services:
       - "${BUILD_CONTRACTS_PATH}:/root/enigma-contract/build/contracts"
 
   core:
-    image: enigmampc/enigma_core_sw
+    image: enigmampc/enigma_core_sw:${DOCKER_TAG}
     stdin_open: true
     tty: true
     hostname: core
@@ -66,7 +66,7 @@ services:
       - net
 
   km:
-    image: enigmampc/enigma_km_sw
+    image: enigmampc/enigma_km_sw:${DOCKER_TAG}
     stdin_open: true
     tty: true
     hostname: km
