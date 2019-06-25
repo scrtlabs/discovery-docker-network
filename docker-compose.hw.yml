@@ -2,11 +2,11 @@ version: '3'
 
 services:
   core:
-    image: enigmampc/enigma_core_hw
+    image: enigmampc/enigma_core_hw:${DOCKER_TAG}
     devices:
       - "/dev/isgx:/dev/isgx"
 
   km:
-    image: enigmampc/enigma_km_hw
+    image: enigmampc/enigma_km_hw:${DOCKER_TAG}
     devices:
       - "/dev/isgx:/dev/isgx"
