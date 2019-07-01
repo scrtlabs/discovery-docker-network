@@ -1,0 +1,88 @@
+version: '3'
+
+services:
+
+  contract:
+    image: enigmampc/enigma_contract
+    deploy:
+      placement:
+        constraints:
+          - node.labels.type == enigma
+    stdin_open: true
+    tty: true
+    networks:
+      - net
+    hostname: contract
+    entrypoint:
+      - /bin/bash
+      - -c
+      - ./launch_ganache.bash; bash
+    environment:
+      - SGX_MODE=${SGX_MODE}
+
+  p2p:
+    image: enigmampc/enigma_p2p
+    deploy:
+      placement:
+        constraints:
+          - node.labels.type == worker
+      mode: global
+    stdin_open: true
+    tty: true
+    networks:
+      - net
+    hostname: p2p
+    entrypoint:
+      - /bin/bash
+      - -c
+      - ./start_worker.bash; bash
+    environment:
+      - NETWORK=${COMPOSE_PROJECT_NAME}
+
+  client:
+    image: enigmampc/enigma_contract
+    deploy:
+      placement:
+        constraints:
+          - node.labels.type == client
+    stdin_open: true
+    tty: true
+    networks:
+      - net
+    hostname: client
+    environment:
+      - NETWORK=${COMPOSE_PROJECT_NAME}
+      - NODES
+      - SGX_MODE
+
+  core:
+    image: enigmampc/enigma_core_sw
+    deploy:
+      placement:
+        constraints:
+          - node.labels.type == worker
+      mode: global
+    stdin_open: true
+    tty: true
+    hostname: core
+    networks:
+      - net
+
+  km:
+    image: enigmampc/enigma_km_sw
+    deploy:
+      placement:
+        constraints:
+          - node.labels.type == enigma
+    stdin_open: true
+    tty: true
+    hostname: km
+    networks:
+      - net
+
+networks:
+  net:
+
+volumes:
+  built_contracts:
+  shared:
