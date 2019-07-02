@@ -7,7 +7,7 @@ sleep 5 # give time to aesm_service to start
 pushd /root/enigma-core/enigma-principal/bin
 . /opt/sgxsdk/environment && . /root/.cargo/env && RUST_BACKTRACE=1 ./enigma-principal-app -w
 popd
-
+aws s3 cp /root/.enigma/principal-sign-addr.txt s3://enigma-protocol-shared-storage/enigma
 contract=$(getent hosts contract | awk '{ print $1 }')
 
 echo "Waiting for contracts to be deployed..."
