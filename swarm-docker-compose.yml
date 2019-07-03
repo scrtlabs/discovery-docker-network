@@ -3,7 +3,11 @@ version: '3'
 services:
 
   contract:
-    image: enigmampc/enigma_contract:${DOCKER_TAG}
+    build:
+      context: enigma-contract
+      args:
+        - SGX_MODE=${SGX_MODE}
+        - GIT_BRANCH_CONTRACT=${GIT_BRANCH_CONTRACT}
     deploy:
       placement:
         constraints:
@@ -21,7 +25,10 @@ services:
       - SGX_MODE=${SGX_MODE}
 
   p2p:
-    image: enigmampc/enigma_p2p:${DOCKER_TAG}
+    build:
+      context: enigma-p2p
+      args:
+        - GIT_BRANCH_P2P=${GIT_BRANCH_P2P}
     deploy:
       placement:
         constraints:
@@ -40,7 +47,10 @@ services:
       - NETWORK=${COMPOSE_PROJECT_NAME}
 
   client:
-    image: enigmampc/enigma_contract:${DOCKER_TAG}
+    build:
+      context: enigma-contract
+      args:
+        - GIT_BRANCH_CONTRACT=${GIT_BRANCH_CONTRACT}
     deploy:
       placement:
         constraints:
@@ -56,7 +66,11 @@ services:
       - SGX_MODE
 
   core:
-    image: enigmampc/enigma_core_sw:${DOCKER_TAG}
+    build:
+      context: enigma-core
+      args:
+        - SGX_MODE=${SGX_MODE}
+        - GIT_BRANCH_CORE=${GIT_BRANCH_CORE}
     deploy:
       placement:
         constraints:
@@ -69,7 +83,12 @@ services:
       - net
 
   km:
-    image: enigmampc/enigma_km_sw:${DOCKER_TAG}
+    build:
+      context: enigma-core
+      dockerfile: Dockerfile.km
+      args:
+        - SGX_MODE=${SGX_MODE}
+        - GIT_BRANCH_CORE=${GIT_BRANCH_CORE}
     deploy:
       placement:
         constraints:
