@@ -56,7 +56,7 @@ services:
       - SGX_MODE
 
   core:
-    image: avishaiw/enigma_core_sw:latest
+    image: avishaiw/enigma_core:latest
     deploy:
       placement:
         constraints:
@@ -69,7 +69,7 @@ services:
       - net
 
   km:
-    image: avishaiw/enigma_km_sw:latest
+    image: avishaiw/enigma_km:latest
     deploy:
       placement:
         constraints:
