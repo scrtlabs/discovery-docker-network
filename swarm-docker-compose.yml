@@ -3,11 +3,11 @@ version: '3'
 services:
 
   contract:
-    image: enigmampc/enigma_contract
+    image: enigmampc/enigma_contract:${DOCKER_TAG}
     deploy:
       placement:
         constraints:
-          - node.labels.type == enigma
+          - node.labels.type == contract
     stdin_open: true
     tty: true
     networks:
@@ -21,7 +21,7 @@ services:
       - SGX_MODE=${SGX_MODE}
 
   p2p:
-    image: enigmampc/enigma_p2p
+    image: enigmampc/enigma_p2p:${DOCKER_TAG}
     deploy:
       placement:
         constraints:
@@ -40,7 +40,7 @@ services:
       - NETWORK=${COMPOSE_PROJECT_NAME}
 
   client:
-    image: enigmampc/enigma_contract
+    image: enigmampc/enigma_contract:${DOCKER_TAG}
     deploy:
       placement:
         constraints:
@@ -56,7 +56,7 @@ services:
       - SGX_MODE
 
   core:
-    image: enigmampc/enigma_core_sw
+    image: enigmampc/enigma_core_sw:${DOCKER_TAG}
     deploy:
       placement:
         constraints:
@@ -69,11 +69,11 @@ services:
       - net
 
   km:
-    image: enigmampc/enigma_km_sw
+    image: enigmampc/enigma_km_sw:${DOCKER_TAG}
     deploy:
       placement:
         constraints:
-          - node.labels.type == enigma
+          - node.labels.type == km
     stdin_open: true
     tty: true
     hostname: km
