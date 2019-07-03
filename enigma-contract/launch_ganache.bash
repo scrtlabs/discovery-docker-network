@@ -1,5 +1,6 @@
 #!/bin/bash
 rm -f /root/.enigma/principal-sign-addr.txt ./enigma-contract/enigmacontract.txt ./enigmacontract/enigmatokencontract.txt
+sudo apt-get update && sudo apt install awscli -y
 until [! $(aws s3 ls s3://enigma-protocol-shared-storage/enigma | grep principal-sign-addr.txt) ];do sleep 1; done;
 
 aws s3 sync s3://enigma-protocol-shared-storage/enigma /home/ubuntu/.enigma
