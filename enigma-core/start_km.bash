@@ -8,7 +8,7 @@ pushd /root/enigma-core/enigma-principal/bin
 . /opt/sgxsdk/environment && . /root/.cargo/env && RUST_BACKTRACE=1 ./enigma-principal-app -w
 popd
 sudo apt-get update && sudo apt install awscli -y
-aws s3 cp /root/.enigma/principal-sign-addr.txt s3://enigma-protocol-shared-storage/enigma
+aws s3 cp /root/.enigma/principal-sign-addr.txt s3://enigma-protocol-shared-storage/enigma/principal-sign-addr.txt
 contract=$(getent hosts contract | awk '{ print $1 }')
 
 echo "Waiting for contracts to be deployed..."
