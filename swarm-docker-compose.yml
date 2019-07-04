@@ -3,7 +3,7 @@ version: '3'
 services:
 
   contract:
-    image: avishaiw/enigma_contract:latest
+    image: avishaiw/enigma_contract:0.1
     deploy:
       placement:
         constraints:
@@ -21,7 +21,7 @@ services:
       - SGX_MODE=${SGX_MODE}
 
   p2p:
-    image: avishaiw/enigma_p2p:latest
+    image: avishaiw/enigma_p2p:0.1
     deploy:
       placement:
         constraints:
@@ -40,7 +40,7 @@ services:
       - NETWORK=${COMPOSE_PROJECT_NAME}
 
   client:
-    image: avishaiw/enigma_contract:latest
+    image: avishaiw/enigma_contract:0.1
     deploy:
       placement:
         constraints:
@@ -56,7 +56,7 @@ services:
       - SGX_MODE
 
   core:
-    image: avishaiw/enigma_core:latest
+    image: avishaiw/enigma_core:0.1
     deploy:
       placement:
         constraints:
@@ -69,7 +69,7 @@ services:
       - net
 
   km:
-    image: avishaiw/enigma_km:latest
+    image: avishaiw/enigma_km:0.2
     deploy:
       placement:
         constraints:
