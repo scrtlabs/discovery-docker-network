@@ -4,7 +4,7 @@ LABEL maintainer='info@enigma.co'
 
 WORKDIR /root
 
-ARG GIT_BRANCH_CONTRACT
+ARG GIT_BRANCH_CONTRACT=develop
 RUN git clone -b $GIT_BRANCH_CONTRACT --single-branch https://github.com/enigmampc/enigma-contract.git
 
 RUN apt-get update && apt-get install -y sudo net-tools netcat build-essential nano

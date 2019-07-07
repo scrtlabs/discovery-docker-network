@@ -4,13 +4,13 @@ LABEL maintainer='info@enigma.co'
 
 WORKDIR /root
 
-ARG GIT_BRANCH_CORE
+ARG GIT_BRANCH_CORE=develop
 RUN git clone -b $GIT_BRANCH_CORE --single-branch https://github.com/enigmampc/enigma-core.git
 
 WORKDIR /root/enigma-core/enigma-principal
 RUN . /opt/sgxsdk/environment && . /root/.cargo/env && make full-clean
 
-ARG SGX_MODE
+ARG SGX_MODE=SW
 
 RUN . /opt/sgxsdk/environment && . /root/.cargo/env && SGX_MODE=$SGX_MODE RUSTFLAGS=-Awarnings RUST_BACKTRACE=1 make DEBUG=1 || \
     echo "\n\n**** This is a known error. Ignore for now. Will succeed upon retry ***\n" && \

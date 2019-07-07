@@ -12,8 +12,9 @@ aws s3 cp /root/.enigma/principal-sign-addr.txt s3://enigma-protocol-shared-stor
 contract=$(getent hosts contract | awk '{ print $1 }')
 
 echo "Waiting for contracts to be deployed..."
-until curl -s -m 1 contract:8081 >/dev/null 2>&1; do sleep 1; done
-contractaddress=$(curl -s http://contract:8081 | sed "s/^0x//")
+while ! aws s3 ls s3://enigma-protocol-shared-storage/enigma/ | grep enigmacontract.txt; do sleep 1;done;
+aws s3 cp s3://enigma-protocol-shared-storage/enigma/enigmacontract.txt /root/.enigma/enigmacontract.txt
+contractaddress=$(cat .enigma/enigmacontract.txt | sed "s/^0x//")
 
 sed -i "s_http://[localhost|.0-9]*:9545_http://$contract:9545_" principal_test_config.json
 sed -i "s/\(\"enigma_contract_address\":\) \"[0-9a-fA-F]*\"/\1 \"$contractaddress\"/" principal_test_config.json

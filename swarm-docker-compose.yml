@@ -19,6 +19,7 @@ services:
       - ./launch_ganache.bash; bash
     environment:
       - SGX_MODE=${SGX_MODE}
+    volume: "built_contracts:/root/enigma-contract/build/contracts"
 
   p2p:
     image: avishaiw/enigma_p2p:0.1
@@ -54,6 +55,7 @@ services:
       - NETWORK=${COMPOSE_PROJECT_NAME}
       - NODES
       - SGX_MODE
+    volume: "built_contracts:/root/enigma-contract/build/contracts"
 
   core:
     image: avishaiw/enigma_core:0.1
