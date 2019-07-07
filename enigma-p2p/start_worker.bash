@@ -2,7 +2,7 @@
 
 # Give time for other containers to start
 sleep 5
-
+sudo apt-get update >/dev/null 2>&1 && sudo apt install awscli -y >/dev/null 2>&1
 # Environment variable NETWORK is set through docker-compose.yml
 
 eth_accounts=(
@@ -44,7 +44,9 @@ echo "Waiting for the Key Management node to start..."
 until curl -s -m 1 km:3040 >/dev/null 2>&1; do sleep 2; done
 
 while [ -z $ENIGMACONTRACT ]; do
-	ENIGMACONTRACT="$(curl -s http://contract:8081)"
+    while ! aws s3 ls s3://enigma-protocol-shared-storage/enigma/ | grep enigmacontract.txt; do sleep 1;done;
+    aws s3 cp s3://enigma-protocol-shared-storage/enigma/enigmacontract.txt /root/.enigma/enigmacontract.txt
+	ENIGMACONTRACT="$(cat .enigma/enigmacontract.txt)"
 done
 echo "Enigma Contract Address is : $ENIGMACONTRACT"
 
