@@ -3,7 +3,7 @@ version: '3'
 services:
 
   contract:
-    image: avishaiw/enigma_contract:0.1
+    image: avishaiw/enigma_contract:0.3
     deploy:
       placement:
         constraints:
@@ -22,7 +22,7 @@ services:
     volume: "built_contracts:/root/enigma-contract/build/contracts"
 
   p2p:
-    image: avishaiw/enigma_p2p:0.1
+    image: avishaiw/enigma_p2p:0.3
     deploy:
       placement:
         constraints:
@@ -41,7 +41,7 @@ services:
       - NETWORK=${COMPOSE_PROJECT_NAME}
 
   client:
-    image: avishaiw/enigma_contract:0.1
+    image: avishaiw/enigma_contract:0.3
     deploy:
       placement:
         constraints:
@@ -58,7 +58,7 @@ services:
     volume: "built_contracts:/root/enigma-contract/build/contracts"
 
   core:
-    image: avishaiw/enigma_core:0.1
+    image: avishaiw/enigma_core:0.3
     deploy:
       placement:
         constraints:
@@ -71,7 +71,7 @@ services:
       - net
 
   km:
-    image: avishaiw/enigma_km:0.2
+    image: avishaiw/enigma_km:0.3
     deploy:
       placement:
         constraints:
