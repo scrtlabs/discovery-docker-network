@@ -4,7 +4,7 @@ LABEL maintainer='info@enigma.co'
 
 WORKDIR /root
 
-ARG GIT_BRANCH_P2P
+ARG GIT_BRANCH_P2P=develop
 RUN git clone -b $GIT_BRANCH_P2P --single-branch https://github.com/enigmampc/enigma-p2p.git
 
 RUN apt-get update && apt-get install -y sudo net-tools netcat
