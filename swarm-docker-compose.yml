@@ -60,7 +60,7 @@ services:
       - "built_contracts:/root/enigma-contract/build/contracts"
 
   core:
-    image: avishaiw/enigma_core:0.3
+    image: avishaiw/enigma_core:0.4
     deploy:
       placement:
         constraints:
@@ -73,7 +73,7 @@ services:
       - net
 
   km:
-    image: avishaiw/enigma_km:0.3
+    image: avishaiw/enigma_km:0.4
     deploy:
       placement:
         constraints:
