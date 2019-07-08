@@ -3,7 +3,7 @@ version: '3'
 services:
 
   contract:
-    image: avishaiw/enigma_contract:0.3
+    image: avishaiw/enigma_contract:0.4
     deploy:
       placement:
         constraints:
@@ -42,7 +42,7 @@ services:
       - NETWORK=${COMPOSE_PROJECT_NAME}
 
   client:
-    image: avishaiw/enigma_contract:0.3
+    image: avishaiw/enigma_contract:0.4
     deploy:
       placement:
         constraints:

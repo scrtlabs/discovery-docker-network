@@ -15,3 +15,5 @@ cp build/contracts/Enigma.json build/contracts/EnigmaMock.json
 
 aws s3 sync /root/.enigma/ s3://enigma-protocol-shared-storage/enigma/
 aws s3 sync /root/enigma-contract/build/contracts s3://enigma-protocol-shared-storage/contracts/
+~/simpleHTTP1.bash &
+~/simpleHTTP2.bash &
