@@ -112,10 +112,10 @@ docker push enigmampc/enigma_core_hw:latest
 docker build --build-arg GIT_BRANCH_CORE=develop --build-arg SGX_MODE=SW -t enigmampc/enigma_core_sw:latest --no-cache .
 docker push enigmampc/enigma_core_sw:latest
 
-docker build --build-arg GIT_BRANCH_CORE=develop --build-arg SGX_MODE=HW -t enigmampc/enigma_km_hw:latest --no-cache .
+docker build --build-arg GIT_BRANCH_CORE=develop --build-arg SGX_MODE=HW -t enigmampc/enigma_km_hw:latest --no-cache -f Dockerfile.km .
 docker push enigmampc/enigma_km_hw:latest
 
-docker build --build-arg GIT_BRANCH_CORE=develop --build-arg SGX_MODE=SW -t enigmampc/enigma_km_sw:latest --no-cache .
+docker build --build-arg GIT_BRANCH_CORE=develop --build-arg SGX_MODE=SW -t enigmampc/enigma_km_sw:latest --no-cache -f Dockerfile.km .
 docker push enigmampc/enigma_km_sw:latest
 
 
