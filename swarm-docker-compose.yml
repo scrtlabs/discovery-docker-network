@@ -23,7 +23,7 @@ services:
       - "built_contracts:/root/enigma-contract/build/contracts"
 
   p2p:
-    image: avishaiw/enigma_p2p:0.3
+    image: avishaiw/enigma_p2p:0.4
     deploy:
       placement:
         constraints:
