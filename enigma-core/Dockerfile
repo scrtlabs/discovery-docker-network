@@ -10,7 +10,7 @@ RUN git clone -b $GIT_BRANCH_CORE --single-branch https://github.com/enigmampc/e
 WORKDIR /root/enigma-core/enigma-core
 RUN . /opt/sgxsdk/environment && . /root/.cargo/env && make full-clean
 
-ARG SGX_MODE
+ENV SGX_MODE=SW
 
 RUN . /opt/sgxsdk/environment && . /root/.cargo/env && /root/.cargo/bin/rustup component add rustfmt --toolchain nightly-2019-05-20-x86_64-unknown-linux-gnu
 

@@ -23,22 +23,22 @@ eth_accounts=(
 IP=$(getent hosts p2p | awk '{ print $1 }')
 for i in {1..10}
 do
-	if [ $(getent hosts ${NETWORK}_p2p_$i | awk '{ print $1 }') == $IP ]; then
+	if [ $(getent hosts ${NETWORK}_p2p | awk '{ print $1 }') == $IP ]; then
 		INDEX=$i
-		CORE=$(getent hosts ${NETWORK}_core_${INDEX} | awk '{ print $1 }')
+		CORE=$(getent hosts ${NETWORK}_core | awk '{ print $1 }')
 		break
 	fi
 done
 
 while true; do
-	curl -s -m 1 ${NETWORK}_core_${INDEX}:5552 >/dev/null 2>&1
+	curl -s -m 1 ${NETWORK}_core:5552 >/dev/null 2>&1
 	if [  $? -eq 28 ] ; then
 		break
 	fi
-	echo "${HOSTNAME}_${INDEX}: Waiting for core_${INDEX}..."
+	echo "${HOSTNAME}: Waiting for core..."
 	sleep 10
 done
-echo "core_${INDEX} is ready!"
+echo "core is ready!"
 
 echo "Waiting for the Key Management node to start..."
 until curl -s -m 1 km:3040 >/dev/null 2>&1; do sleep 2; done
@@ -53,14 +53,14 @@ echo "Enigma Contract Address is : $ENIGMACONTRACT"
 CONTRACT=$(getent hosts contract | awk '{ print $1 }')
 KM="http://$(getent hosts km | awk '{ print $1 }'):3040"
 
-echo "Starting ${NETWORK}_p2p_${INDEX} with Ethereum Address: ${eth_accounts[$INDEX - 1]} and the following command:"
+echo "Starting ${NETWORK}_p2p with Ethereum Address: ${eth_accounts[0]} and the following command:"
 if [ $INDEX == 1 ]; then
-	P2P_CMD="node cli_app.js -i B1 -b B1 -p B1 --core $CORE:5552 --ethereum-websocket-provider ws://$CONTRACT:9545 --ethereum-contract-address $ENIGMACONTRACT --proxy 3346 --random-db --principal-node $KM --ethereum-address ${eth_accounts[$INDEX - 1]} --auto-init"
+	P2P_CMD="node cli_app.js -i B1 -b B1 -p B1 --core $CORE:5552 --ethereum-websocket-provider ws://$CONTRACT:9545 --ethereum-contract-address $ENIGMACONTRACT --proxy 3346 --random-db --principal-node $KM --ethereum-address ${eth_accounts[0]} --auto-init"
 	echo $P2P_CMD
 	cd enigma-p2p/src/cli && $P2P_CMD; bash
 else
-	BOOTSTRAP=$(getent hosts ${NETWORK}_p2p_1 | awk '{ print $1 }')
-	P2P_CMD="node cli_app.js -b /ip4/$BOOTSTRAP/tcp/10300/ipfs/QmcrQZ6RJdpYuGvZqD5QEHAv6qX4BrQLJLQPQUrTrzdcgm -n peer1 --core $CORE:5552 --ethereum-websocket-provider ws://$CONTRACT:9545 --ethereum-contract-address $ENIGMACONTRACT --proxy 3346 --random-db --principal-node $KM --ethereum-address ${eth_accounts[$INDEX - 1]} --auto-init"
+	BOOTSTRAP=$(getent hosts ${NETWORK}_p2p | awk '{ print $1 }')
+	P2P_CMD="node cli_app.js -b /ip4/$BOOTSTRAP/tcp/10300/ipfs/QmcrQZ6RJdpYuGvZqD5QEHAv6qX4BrQLJLQPQUrTrzdcgm -n peer1 --core $CORE:5552 --ethereum-websocket-provider ws://$CONTRACT:9545 --ethereum-contract-address $ENIGMACONTRACT --proxy 3346 --random-db --principal-node $KM --ethereum-address ${eth_accounts[0]} --auto-init"
 	echo $P2P_CMD
 	cd enigma-p2p/src/cli && $P2P_CMD; bash
 fi
