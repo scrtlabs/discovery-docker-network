@@ -69,36 +69,40 @@ Due to the interdependencies between repositories, special care must be taken wh
 
 Use the following commands for step 2 above:
 
-- If merging onto `develop`, depending on the repo (change `GIT_BRANCH_REPO` to feature branch if needed):
+- For pushing into `develop`: 
+
+The GIT_BRANCH_CORE/GIT_BRANCH_KM/GIT_BRANCH_P2P/GIT_BRANCH_CONTRACT set the relavant branch name (in the described case, it should be set to the feature branch):
 ```
 cd discovery-docker-network/enigma-core
 
-docker build --build-arg GIT_BRANCH_CORE=develop --build-arg SGX_MODE=HW -t enigmampc/enigma_core_hw:develop --no-cache .
+docker build --build-arg GIT_BRANCH_CORE=<branch_name> --build-arg SGX_MODE=HW -t enigmampc/enigma_core_hw:develop --no-cache .
 docker push enigmampc/enigma_core_hw:develop
 
-docker build --build-arg GIT_BRANCH_CORE=develop --build-arg SGX_MODE=SW -t enigmampc/enigma_core_sw:develop --no-cache .
+docker build --build-arg GIT_BRANCH_CORE=<branch_name> --build-arg SGX_MODE=SW -t enigmampc/enigma_core_sw:develop --no-cache .
 docker push enigmampc/enigma_core_sw:develop
 
-docker build --build-arg GIT_BRANCH_CORE=develop --build-arg SGX_MODE=HW -t enigmampc/enigma_km_hw:develop --no-cache -f Dockerfile.km .
+docker build --build-arg GIT_BRANCH_CORE=<branch_name> --build-arg SGX_MODE=HW -t enigmampc/enigma_km_hw:develop --no-cache -f Dockerfile.km .
 docker push enigmampc/enigma_km_hw:develop
 
-docker build --build-arg GIT_BRANCH_CORE=develop --build-arg SGX_MODE=SW -t enigmampc/enigma_km_sw:develop --no-cache -f Dockerfile.km .
+docker build --build-arg GIT_BRANCH_CORE=<branch_name> --build-arg SGX_MODE=SW -t enigmampc/enigma_km_sw:develop --no-cache -f Dockerfile.km .
 docker push enigmampc/enigma_km_sw:develop
 
 
 cd discovery-docker-network/enigma-contract
 
-docker build --build-arg GIT_BRANCH_CONTRACT=develop -t enigmampc/enigma_contract:develop --no-cache .
+docker build --build-arg GIT_BRANCH_CONTRACT=<branch_name> -t enigmampc/enigma_contract:develop --no-cache .
 docker push enigmampc/enigma_contract:develop
 
 
 cd discovery-docker-network/enigma-p2p
 
-docker build --build-arg GIT_BRANCH_P2P=develop -t enigmampc/enigma_p2p:develop --no-cache .
+docker build --build-arg GIT_BRANCH_P2P=<branch_name> -t enigmampc/enigma_p2p:develop --no-cache .
 docker push enigmampc/enigma_p2p:develop
 ```
 
-- If merging onto `master`, depending on the repo (change `GIT_BRANCH_REPO` to `develop` or `master` as needed):
+- For pushing into `latest`: 
+
+The GIT_BRANCH_CORE/GIT_BRANCH_KM/GIT_BRANCH_P2P/GIT_BRANCH_CONTRACT set the relavant branch name (in the described case, it should be set to the feature branch):
 
 > **Be extra careful when manually pushing docker images tagged `latest`**<br/>
 > **because many developers depend on them!**
@@ -106,28 +110,28 @@ docker push enigmampc/enigma_p2p:develop
 ```
 cd discovery-docker-network/enigma-core
 
-docker build --build-arg GIT_BRANCH_CORE=develop --build-arg SGX_MODE=HW -t enigmampc/enigma_core_hw:latest --no-cache .
+docker build --build-arg GIT_BRANCH_CORE=<branch_name> --build-arg SGX_MODE=HW -t enigmampc/enigma_core_hw:latest --no-cache .
 docker push enigmampc/enigma_core_hw:latest
 
-docker build --build-arg GIT_BRANCH_CORE=develop --build-arg SGX_MODE=SW -t enigmampc/enigma_core_sw:latest --no-cache .
+docker build --build-arg GIT_BRANCH_CORE=<branch_name> --build-arg SGX_MODE=SW -t enigmampc/enigma_core_sw:latest --no-cache .
 docker push enigmampc/enigma_core_sw:latest
 
-docker build --build-arg GIT_BRANCH_CORE=develop --build-arg SGX_MODE=HW -t enigmampc/enigma_km_hw:latest --no-cache -f Dockerfile.km .
+docker build --build-arg GIT_BRANCH_CORE=<branch_name> --build-arg SGX_MODE=HW -t enigmampc/enigma_km_hw:latest --no-cache -f Dockerfile.km .
 docker push enigmampc/enigma_km_hw:latest
 
-docker build --build-arg GIT_BRANCH_CORE=develop --build-arg SGX_MODE=SW -t enigmampc/enigma_km_sw:latest --no-cache -f Dockerfile.km .
+docker build --build-arg GIT_BRANCH_CORE=<branch_name> --build-arg SGX_MODE=SW -t enigmampc/enigma_km_sw:latest --no-cache -f Dockerfile.km .
 docker push enigmampc/enigma_km_sw:latest
 
 
 cd discovery-docker-network/enigma-contract
 
-docker build --build-arg GIT_BRANCH_CONTRACT=develop -t enigmampc/enigma_contract:latest --no-cache .
+docker build --build-arg GIT_BRANCH_CONTRACT=<branch_name> -t enigmampc/enigma_contract:latest --no-cache .
 docker push enigmampc/enigma_contract:latest
 
 
 cd discovery-docker-network/enigma-p2p
 
-docker build --build-arg GIT_BRANCH_P2P=develop -t enigmampc/enigma_p2p:latest --no-cache .
+docker build --build-arg GIT_BRANCH_P2P=<branch_name> -t enigmampc/enigma_p2p:latest --no-cache .
 docker push enigmampc/enigma_p2p:latest
 ```
 
