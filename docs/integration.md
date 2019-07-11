@@ -1,6 +1,6 @@
 # Integration Tests
 
-You can run all and any of the integration tests documented [here](https://github.com/enigmampc/discovery-docker-network/issues/2)].
+You can run all and any of the integration tests documented [here](https://github.com/enigmampc/discovery-docker-network/issues/2).
 
 ## Running the tests
 
@@ -52,3 +52,92 @@ After following steps 1 and 2 above, do the following:
 	root@client:~/enigma-contract/enigma-js/test/integrationTests# yarn test:integration 02_deploy_calculator.spec.js
 	root@client:~/enigma-contract/enigma-js/test/integrationTests# yarn test:integration 10_execute_calculator.spec.js
 	```
+## Integration Tests and Continuous Integration (CI)
+
+The integration tests have been added as additional steps to the unit tests of the contract ([PR 115](https://github.com/enigmampc/enigma-contract/pull/115)), core ([PR 176](https://github.com/enigmampc/enigma-core/pull/176)) and p2p ([PR 205](https://github.com/enigmampc/enigma-p2p/pull/205)).
+
+To streamline running the integration tests in both CIs (Travis (contract, p2p) and Drone (core)), we maintain prebuilt Docker images of each repo ([enigmampc Docker link](https://cloud.docker.com/u/enigmampc/repository/list)) with two different tags:
+- `latest`: built from branch `master` on each repo, and the images that [enigmampc/discovery-cli](https://github.com/enigmampc/discovery-cli) uses
+- `develop`: built from branch `develop` on each repo, used primarily for development and testing
+
+Due to the interdependencies between repositories, special care must be taken when pushing breaking changes across more than one repository because that will break the CI. In those special cases, some manual intervention must be done to preserve the integrity of the tests:
+
+1. Run the integration tests locally to ensure that they pass.
+2. Manually build the Docker image for repo A, and push it to the Docker Hub
+3. Merge PR for repo B, and wait for the Docker image(s) to be automatically build and pushed to the Docker Hub
+4. Merge PR for repo A, and wait for the Docker image(s) to be automatically build and pushed to the Docker Hub
+
+Use the following commands for step 2 above:
+
+- For pushing into `develop`: 
+
+The GIT_BRANCH_CORE/GIT_BRANCH_KM/GIT_BRANCH_P2P/GIT_BRANCH_CONTRACT set the relavant branch name (in the described case, it should be set to the feature branch):
+```
+cd discovery-docker-network/enigma-core
+
+docker build --build-arg GIT_BRANCH_CORE=<branch_name> --build-arg SGX_MODE=HW -t enigmampc/enigma_core_hw:develop --no-cache .
+docker push enigmampc/enigma_core_hw:develop
+
+docker build --build-arg GIT_BRANCH_CORE=<branch_name> --build-arg SGX_MODE=SW -t enigmampc/enigma_core_sw:develop --no-cache .
+docker push enigmampc/enigma_core_sw:develop
+
+docker build --build-arg GIT_BRANCH_CORE=<branch_name> --build-arg SGX_MODE=HW -t enigmampc/enigma_km_hw:develop --no-cache -f Dockerfile.km .
+docker push enigmampc/enigma_km_hw:develop
+
+docker build --build-arg GIT_BRANCH_CORE=<branch_name> --build-arg SGX_MODE=SW -t enigmampc/enigma_km_sw:develop --no-cache -f Dockerfile.km .
+docker push enigmampc/enigma_km_sw:develop
+
+
+cd discovery-docker-network/enigma-contract
+
+docker build --build-arg GIT_BRANCH_CONTRACT=<branch_name> -t enigmampc/enigma_contract:develop --no-cache .
+docker push enigmampc/enigma_contract:develop
+
+
+cd discovery-docker-network/enigma-p2p
+
+docker build --build-arg GIT_BRANCH_P2P=<branch_name> -t enigmampc/enigma_p2p:develop --no-cache .
+docker push enigmampc/enigma_p2p:develop
+```
+
+- For pushing into `latest`: 
+
+The GIT_BRANCH_CORE/GIT_BRANCH_KM/GIT_BRANCH_P2P/GIT_BRANCH_CONTRACT set the relavant branch name (in the described case, it should be set to the feature branch):
+
+> **Be extra careful when manually pushing docker images tagged `latest`**<br/>
+> **because many developers depend on them!**
+
+```
+cd discovery-docker-network/enigma-core
+
+docker build --build-arg GIT_BRANCH_CORE=<branch_name> --build-arg SGX_MODE=HW -t enigmampc/enigma_core_hw:latest --no-cache .
+docker push enigmampc/enigma_core_hw:latest
+
+docker build --build-arg GIT_BRANCH_CORE=<branch_name> --build-arg SGX_MODE=SW -t enigmampc/enigma_core_sw:latest --no-cache .
+docker push enigmampc/enigma_core_sw:latest
+
+docker build --build-arg GIT_BRANCH_CORE=<branch_name> --build-arg SGX_MODE=HW -t enigmampc/enigma_km_hw:latest --no-cache -f Dockerfile.km .
+docker push enigmampc/enigma_km_hw:latest
+
+docker build --build-arg GIT_BRANCH_CORE=<branch_name> --build-arg SGX_MODE=SW -t enigmampc/enigma_km_sw:latest --no-cache -f Dockerfile.km .
+docker push enigmampc/enigma_km_sw:latest
+
+
+cd discovery-docker-network/enigma-contract
+
+docker build --build-arg GIT_BRANCH_CONTRACT=<branch_name> -t enigmampc/enigma_contract:latest --no-cache .
+docker push enigmampc/enigma_contract:latest
+
+
+cd discovery-docker-network/enigma-p2p
+
+docker build --build-arg GIT_BRANCH_P2P=<branch_name> -t enigmampc/enigma_p2p:latest --no-cache .
+docker push enigmampc/enigma_p2p:latest
+```
+
+
+
+
+
+
+
