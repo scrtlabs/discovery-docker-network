@@ -21,14 +21,8 @@ eth_accounts=(
 # There is no direct way to know which hostname we are other than 'p2p'
 # but we know our IP, and we query through all possible until we find a match
 IP=$(getent hosts p2p | awk '{ print $1 }')
-for i in {1..10}
-do
-	if [ $(getent hosts ${NETWORK}_p2p | awk '{ print $1 }') == $IP ]; then
-		INDEX=$i
-		CORE=$(getent hosts ${NETWORK}_core | awk '{ print $1 }')
-		break
-	fi
-done
+CORE=$(getent hosts ${NETWORK}_core | awk '{ print $1 }')
+
 
 while true; do
 	curl -s -m 1 ${NETWORK}_core:5552 >/dev/null 2>&1
