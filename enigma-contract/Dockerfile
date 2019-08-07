@@ -4,15 +4,17 @@ LABEL maintainer='info@enigma.co'
 
 WORKDIR /root
 
-ARG GIT_BRANCH_CONTRACT
-RUN git clone -b $GIT_BRANCH_CONTRACT --single-branch https://github.com/enigmampc/enigma-contract.git
-
+# Install global dependencies
 RUN apt-get update && apt-get install -y sudo net-tools netcat build-essential nano
 RUN yarn global add ganache-cli truffle
 
-WORKDIR /root/enigma-contract
+# Checkout relevant branch from Git
+ARG GIT_BRANCH_CONTRACT
+RUN git clone -b $GIT_BRANCH_CONTRACT --single-branch https://github.com/enigmampc/enigma-contract.git
 
-RUN npm install
+# Install application dependencies
+WORKDIR /root/enigma-contract
+RUN yarn install
 RUN cd enigma-js && yarn install
 
 WORKDIR /root
