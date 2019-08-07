@@ -5,6 +5,7 @@ LABEL maintainer='info@enigma.co'
 WORKDIR /root
 
 ARG GIT_BRANCH_CORE
+RUN echo "Using branch: $GIT_BRANCH_CORE" 
 RUN git clone -b $GIT_BRANCH_CORE --single-branch https://github.com/enigmampc/enigma-core.git
 
 WORKDIR /root/enigma-core/enigma-core
