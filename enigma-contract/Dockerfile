@@ -1,4 +1,4 @@
-FROM node:11 as runtime
+FROM node:10 as runtime
 
 LABEL maintainer='info@enigma.co'
 
@@ -12,7 +12,7 @@ RUN yarn global add ganache-cli truffle
 
 WORKDIR /root/enigma-contract
 
-RUN npm install
+RUN yarn install
 RUN cd enigma-js && yarn install
 
 WORKDIR /root
