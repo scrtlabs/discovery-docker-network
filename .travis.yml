@@ -18,8 +18,8 @@ before_install:
   - if [[ $TAG == "develop" ]]; then sed -i "s/DOCKER_TAG=latest/DOCKER_TAG=develop/" .env; fi
   - cd enigma-core && docker build --build-arg GIT_BRANCH_CORE=$BUILD --build-arg SGX_MODE=SW -t enigmampc/enigma_core_sw:$TAG --no-cache . && cd ..
   - cd enigma-core && docker build -f Dockerfile.km --build-arg GIT_BRANCH_CORE=$BUILD --build-arg SGX_MODE=SW -t enigmampc/enigma_km_sw:$TAG --no-cache . && cd ..
-  - cd enigma-contract && docker build --build-arg GIT_BRANCH_CONTRACT=BUILD -t enigmampc/enigma_contract:$TAG --no-cache . && cd ..
-  - cd enigma-p2p && docker build --build-arg GIT_BRANCH_P2P=BUILD -t enigmampc/enigma_p2p:$TAG --no-cache . && cd ..
+  - cd enigma-contract && docker build --build-arg GIT_BRANCH_CONTRACT=$BUILD -t enigmampc/enigma_contract:$TAG --no-cache . && cd ..
+  - cd enigma-p2p && docker build --build-arg GIT_BRANCH_P2P=$BUILD -t enigmampc/enigma_p2p:$TAG --no-cache . && cd ..
 
 script:
   - docker-compose -f docker-compose.yml -f docker-compose.test.yml up --exit-code-from client
