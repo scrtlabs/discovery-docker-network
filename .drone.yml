@@ -6,8 +6,12 @@ steps:
     commands:
       - cp .env-template .env
       - sed -i "s/COMPOSE_PROJECT_NAME=.*/COMPOSE_PROJECT_NAME=enigma_${DRONE_BUILD_NUMBER}/" .env
-      - docker-compose down --rmi all -v || true
-      - docker-compose build --no-cache
+      - if [[ ${DRONE_BRANCH} == "master" ]]; then export TAG=latest BUILD=master; else export TAG=develop BUILD=develop; fi
+      - if [[ $TAG == "develop" ]]; then sed -i "s/DOCKER_TAG=latest/DOCKER_TAG=develop/" .env; fi
+      - cd enigma-core && docker build --build-arg GIT_BRANCH_CORE=$BUILD --build-arg SGX_MODE=HW -t enigmampc/enigma_core_hw:$TAG --no-cache . && cd ..
+      - cd enigma-core && docker build -f Dockerfile.km --build-arg GIT_BRANCH_CORE=$BUILD --build-arg SGX_MODE=HW -t enigmampc/enigma_km_hw:$TAG --no-cache . && cd ..
+      - cd enigma-contract && docker build --build-arg GIT_BRANCH_CONTRACT=$BUILD -t enigmampc/enigma_contract:$TAG --no-cache . && cd ..
+      - cd enigma-p2p && docker build --build-arg GIT_BRANCH_P2P=$BUILD -t enigmampc/enigma_p2p:$TAG --no-cache . && cd ..
     volumes:
       - name: dockersock
         path: /var/run/docker.sock
@@ -15,7 +19,7 @@ steps:
   - name: test
     image: docker/compose:1.23.2
     commands:
-      - docker-compose -f docker-compose.yml -f docker-compose.hw.yml -f docker-compose.test.yml up --exit-code-from client
+      - export NODES=3 && docker-compose -f docker-compose.yml -f docker-compose.hw.yml -f docker-compose.test.yml up --scale core=$NODES --scale p2p=$NODES --exit-code-from client
     volumes:
       - name: dockersock
         path: /var/run/docker.sock
