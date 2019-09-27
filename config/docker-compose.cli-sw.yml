@@ -34,6 +34,7 @@ services:
       - ./start_worker.bash; bash
     environment:
       - NETWORK=${COMPOSE_PROJECT_NAME}
+      - NODES
     volumes:
         - "${BUILD_CONTRACTS_PATH}:/root/enigma-p2p/test/ethereum/scripts/build/contracts"
     expose:
