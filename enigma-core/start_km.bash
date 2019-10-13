@@ -3,6 +3,7 @@ rm -rf /root/.enigma/*
 
 LD_LIBRARY_PATH=/opt/intel/libsgx-enclave-common/aesm /opt/intel/libsgx-enclave-common/aesm/aesm_service &
 sleep 5 # give time to aesm_service to start
+cp principal_test_config.json /root/enigma-core/enigma-principal/app/tests/principal_node/config
 
 pushd /root/enigma-core/enigma-principal/bin
 . /opt/sgxsdk/environment && . /root/.cargo/env && RUST_BACKTRACE=1 ./enigma-principal-app -w
