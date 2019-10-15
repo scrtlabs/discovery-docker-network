@@ -17,12 +17,12 @@ sleep $((8*$NODES))
 
 # if we initialized the enigma_proxy to a fixed IP address then take it from there,
 # otherwise, take it from getent.
-if [ -z ${ENIGMA_PROXY_IP} ]; then
+if [ -z ${ENIGMA_PROXY_IP+x} ]; then
   ENIGMA_PROXY_IP=$(getent hosts ${NETWORK}_p2p_1 | awk '{ print $1 }')
 fi
 
 # same as to the ip address of the contract
-if [ -z ${ENIGMA_CONTRACT_IP} ]; then
+if [ -z ${ENIGMA_CONTRACT_IP+x} ]; then
   ENIGMA_CONTRACT_IP=$(getent hosts contract | awk '{ print $1 }')
 fi
 
