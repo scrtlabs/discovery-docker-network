@@ -6,7 +6,7 @@
     "test_net": true,
     "with_private_key": false,
     "private_key": "",
-    "chain_id": "4447",
+    "chain_id": 4447,
     "url": "http://localhost:9545",
     "epoch_size": 10,
     "polling_interval": 1,
