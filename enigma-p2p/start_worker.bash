@@ -59,6 +59,9 @@ KM="http://$(getent hosts km | awk '{ print $1 }'):3040"
 echo "Starting ${NETWORK}_p2p_${INDEX} with Ethereum Address: ${eth_accounts[$INDEX - 1]} and the following command:"
 if [ "$INDEX" == 1 ]; then
 	P2P_CMD="node cli_app.js -i B1 -b B1 -p B1 --core $CORE:5552 --ethereum-websocket-provider ws://$CONTRACT:9545 --ethereum-contract-address $ENIGMACONTRACT --proxy 3346 --random-db --principal-node $KM --ethereum-address ${eth_accounts[$INDEX - 1]} --auto-init"
+	if [ "$NODES" == 1 ]; then
+		P2P_CMD="$P2P_CMD --lonely-node"
+	fi
 	echo $P2P_CMD
 	cd enigma-p2p/src/cli && $P2P_CMD; bash
 else
